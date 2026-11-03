@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice City - Admin Panel</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#100d20;color:white;font:15px Arial}
+header{padding:20px;background:#241333;border-bottom:2px solid #ff3b8d}
+h1{margin:0;color:#35e6ff}
+main{max-width:1000px;margin:30px auto;padding:15px}
+.card{background:#211b35;padding:22px;border-radius:14px;margin-bottom:20px}
+input{display:block;width:100%;padding:13px;margin:12px 0;border:0;border-radius:8px}
+button{padding:11px 18px;border:0;border-radius:8px;background:#ff3b8d;color:white;font-weight:bold;cursor:pointer}
+button.danger{background:#d62839}
+button.good{background:#168f55}
+table{width:100%;border-collapse:collapse}
+td,th{padding:12px;border-bottom:1px solid #51466b;text-align:left}
+small{color:#35e6ff}
+#panel{display:none}
+#msg{color:#ffd23f}
+.tablewrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<header>
+<h1>VICE CITY: CRIME LIFE</h1>
+<small>ADMIN CONTROL CENTER</small>
+</header>
+
+<main>
+<div class="card" id="login">
+<h2>Admin Login</h2>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
+<button id="loginBtn">LOGIN</button>
+<p id="msg"></p>
+</div>
+
+<div id="panel">
+<div class="card">
+<h2>Dashboard</h2>
+<p id="total">Players: Loading...</p>
+<button id="refresh">Refresh Players</button>
+<button id="logout">Logout</button>
+</div>
+
+<div class="card">
+<h2>Player Management</h2>
+<div class="tablewrap">
+<table>
+<thead>
+<tr>
+<th>Email</th>
+<th>Username</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="players"></tbody>
+</table>
+</div>
+<p id="status"></p>
+</div>
+</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+const sb = window.supabase.createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_ANON_KEY
+);
+
+const $ = id => document.getElementById(id);
+
+async function checkAdmin(){
+  const {data:{user}} = await sb.auth.getUser();
+
+  if(!user){
+    $("login").style.display="block";
+    $("panel").style.display="none";
+    return;
+  }
+
+  const {data,error} = await sb
+    .from("player_profiles")
+    .select("role")
+    .eq("id",user.id)
+    .single();
+
+  if(error || !data || data.role!=="admin"){
+    $("msg").textContent="Access denied. Admin account required.";
+    await sb.auth.signOut();
+    return;
+  }
+
+  $("login").style.display="none";
+  $("panel").style.display="block";
+  loadPlayers();
+}
+
+$("loginBtn").onclick=async()=>{
+  $("msg").textContent="Checking login...";
+
+  const {error}=await sb.auth.signInWithPassword({
+    email:$("email").value.trim(),
+    password:$("password").value
+  });
+
+  if(error){
+    $("msg").textContent=error.message;
+    return;
+  }
+
+  await checkAdmin();
+};
+
+async function loadPlayers(){
+  $("status").textContent="Loading...";
+
+  const {data,error}=await sb
+    .from("player_profiles")
+    .select("id,username,role,is_banned,created_at")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    $("status").textContent=error.message;
+    return;
+  }
+
+  $("total").textContent="Players: "+data.length;
+  $("players").innerHTML="";
+
+  data.forEach(p=>{
+    const tr=document.createElement("tr");
+
+    const name=document.createElement("td");
+    name.textContent=p.username||"Player";
+
+    const role=document.createElement("td");
+    role.textContent=p.role;
+
+    const state=document.createElement("td");
+    state.textContent=p.is_banned?"BANNED":"ACTIVE";
+
+    const action=document.createElement("td");
+    const btn=document.createElement("button");
+
+    btn.textContent=p.is_banned?"UNBAN":"BAN";
+    btn.className=p.is_banned?"good":"danger";
+
+    btn.onclick=()=>changeBan(p.id,!p.is_banned);
+
+    action.appendChild(btn);
+
+    tr.append(name,role,state,action);
+    $("players").appendChild(tr);
+  });
+
+  $("status").textContent="Player list updated.";
+}
+
+async function changeBan(id,banned){
+  const {error}=await sb
+    .from("player_profiles")
+    .update({is_banned:banned})
+    .eq("id",id);
+
+  if(error){
+    $("status").textContent=error.message;
+    return;
+  }
+
+  $("status").textContent=banned?"Player banned.":"Player unbanned.";
+  loadPlayers();
+}
+
+$("refresh").onclick=loadPlayers;
+
+$("logout").onclick=async()=>{
+  await sb.auth.signOut();
+  location.reload();
+};
+
+checkAdmin();
+</script>
+</body>
+</html>
