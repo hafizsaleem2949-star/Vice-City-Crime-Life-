@@ -162,6 +162,8 @@ async function loadPlayers(){
   const profiles=profileResult.data || [];
   const saves=saveResult.data || [];
   const saveMap=new Map(saves.map(s=>[s.user_id,s]));
+  console.log("PLAYER SAVES:", saves);
+console.log("PROFILE DATA:", profiles);
 
   $("total").textContent=profiles.length;
   $("banned").textContent=profiles.filter(p=>p.is_banned).length;
