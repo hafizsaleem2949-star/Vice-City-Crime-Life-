@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,18 +10,24 @@
 body{margin:0;background:#100d20;color:white;font:15px Arial}
 header{padding:20px;background:#241333;border-bottom:2px solid #ff3b8d}
 h1{margin:0;color:#35e6ff}
-main{max-width:1000px;margin:30px auto;padding:15px}
-.card{background:#211b35;padding:22px;border-radius:14px;margin-bottom:20px}
-input{display:block;width:100%;padding:13px;margin:12px 0;border:0;border-radius:8px}
-button{padding:11px 18px;border:0;border-radius:8px;background:#ff3b8d;color:white;font-weight:bold;cursor:pointer}
+main{max-width:1200px;margin:25px auto;padding:15px}
+.card{background:#211b35;padding:20px;border-radius:14px;margin-bottom:20px}
+input{width:100%;padding:10px;margin:5px 0;border:1px solid #51466b;border-radius:7px;background:#100d20;color:white}
+button{padding:10px 15px;border:0;border-radius:8px;background:#ff3b8d;color:white;font-weight:bold;cursor:pointer;margin:3px}
 button.danger{background:#d62839}
 button.good{background:#168f55}
-table{width:100%;border-collapse:collapse}
-td,th{padding:12px;border-bottom:1px solid #51466b;text-align:left}
+button:disabled{opacity:.4;cursor:not-allowed}
+table{width:100%;border-collapse:collapse;min-width:850px}
+td,th{padding:11px;border-bottom:1px solid #51466b;text-align:left}
 small{color:#35e6ff}
 #panel{display:none}
 #msg{color:#ffd23f}
 .tablewrap{overflow-x:auto}
+.stats{display:flex;gap:12px;flex-wrap:wrap}
+.stat{background:#100d20;padding:15px;border-radius:10px;flex:1;min-width:130px}
+.stat b{display:block;font-size:24px;color:#35e6ff;margin-top:8px}
+.editor{width:85px}
+#status{color:#ffd23f}
 </style>
 </head>
 <body>
@@ -41,21 +48,31 @@ small{color:#35e6ff}
 <div id="panel">
 <div class="card">
 <h2>Dashboard</h2>
-<p id="total">Players: Loading...</p>
+<div class="stats">
+<div class="stat">Total Players<b id="total">0</b></div>
+<div class="stat">Banned Players<b id="banned">0</b></div>
+<div class="stat">Game Saves<b id="saves">0</b></div>
+</div>
+<br>
 <button id="refresh">Refresh Players</button>
 <button id="logout">Logout</button>
 </div>
 
 <div class="card">
 <h2>Player Management</h2>
+<p>Cash, Health aur Mission Progress yahan manage karein.</p>
 <div class="tablewrap">
 <table>
 <thead>
 <tr>
-<th>Email</th>
-<th>Username</th>
+<th>Username / ID</th>
+<th>Role</th>
 <th>Status</th>
-<th>Action</th>
+<th>Cash</th>
+<th>Health</th>
+<th>Mission</th>
+<th>Save</th>
+<th>Ban</th>
 </tr>
 </thead>
 <tbody id="players"></tbody>
@@ -75,31 +92,34 @@ const sb = window.supabase.createClient(
 );
 
 const $ = id => document.getElementById(id);
+let currentAdminId = null;
 
 async function checkAdmin(){
-  const {data:{user}} = await sb.auth.getUser();
+  const {data:{user},error:userError} = await sb.auth.getUser();
 
-  if(!user){
+  if(userError || !user){
     $("login").style.display="block";
     $("panel").style.display="none";
     return;
   }
 
+  currentAdminId = user.id;
+
   const {data,error} = await sb
     .from("player_profiles")
-    .select("role")
+    .select("role,is_banned")
     .eq("id",user.id)
     .single();
 
-  if(error || !data || data.role!=="admin"){
-    $("msg").textContent="Access denied. Admin account required.";
+  if(error || !data || data.role!=="admin" || data.is_banned){
+    $("msg").textContent="Access denied. Active admin account required.";
     await sb.auth.signOut();
     return;
   }
 
   $("login").style.display="none";
   $("panel").style.display="block";
-  loadPlayers();
+  await loadPlayers();
 }
 
 $("loginBtn").onclick=async()=>{
@@ -119,63 +139,184 @@ $("loginBtn").onclick=async()=>{
 };
 
 async function loadPlayers(){
-  $("status").textContent="Loading...";
+  $("status").textContent="Loading players...";
 
-  const {data,error}=await sb
-    .from("player_profiles")
-    .select("id,username,role,is_banned,created_at")
-    .order("created_at",{ascending:false});
+  const [profileResult,saveResult] = await Promise.all([
+    sb.from("player_profiles")
+      .select("id,username,role,is_banned,created_at")
+      .order("created_at",{ascending:false}),
+    sb.from("game_saves")
+      .select("user_id,money,health,mission_index")
+  ]);
 
-  if(error){
-    $("status").textContent=error.message;
+  if(profileResult.error){
+    $("status").textContent="Players error: "+profileResult.error.message;
     return;
   }
 
-  $("total").textContent="Players: "+data.length;
+  if(saveResult.error){
+    $("status").textContent="Saves error: "+saveResult.error.message;
+    return;
+  }
+
+  const profiles=profileResult.data || [];
+  const saves=saveResult.data || [];
+  const saveMap=new Map(saves.map(s=>[s.user_id,s]));
+
+  $("total").textContent=profiles.length;
+  $("banned").textContent=profiles.filter(p=>p.is_banned).length;
+  $("saves").textContent=saves.length;
   $("players").innerHTML="";
 
-  data.forEach(p=>{
+  profiles.forEach(p=>{
+    const save=saveMap.get(p.id);
     const tr=document.createElement("tr");
 
-    const name=document.createElement("td");
-    name.textContent=p.username||"Player";
+    function cell(value){
+      const td=document.createElement("td");
+      td.textContent=value;
+      tr.appendChild(td);
+      return td;
+    }
 
-    const role=document.createElement("td");
-    role.textContent=p.role;
+    const identity=cell((p.username || "Player")+" ");
+    const idSmall=document.createElement("small");
+    idSmall.textContent=p.id.slice(0,8)+"...";
+    identity.appendChild(document.createElement("br"));
+    identity.appendChild(idSmall);
 
-    const state=document.createElement("td");
-    state.textContent=p.is_banned?"BANNED":"ACTIVE";
+    cell(p.role || "player");
+    cell(p.is_banned?"BANNED":"ACTIVE");
 
-    const action=document.createElement("td");
-    const btn=document.createElement("button");
+    const cashCell=cell("");
+    const healthCell=cell("");
+    const missionCell=cell("");
 
-    btn.textContent=p.is_banned?"UNBAN":"BAN";
-    btn.className=p.is_banned?"good":"danger";
+    const cash=document.createElement("input");
+    cash.type="number";
+    cash.min="0";
+    cash.step="1";
+    cash.className="editor";
+    cash.value=save ? save.money : 0;
+    cash.disabled=!save;
+    cashCell.appendChild(cash);
 
-    btn.onclick=()=>changeBan(p.id,!p.is_banned);
+    const health=document.createElement("input");
+    health.type="number";
+    health.min="0";
+    health.max="100";
+    health.step="1";
+    health.className="editor";
+    health.value=save ? save.health : 100;
+    health.disabled=!save;
+    healthCell.appendChild(health);
 
-    action.appendChild(btn);
+    const mission=document.createElement("input");
+    mission.type="number";
+    mission.min="0";
+    mission.step="1";
+    mission.className="editor";
+    mission.value=save ? save.mission_index : 0;
+    mission.disabled=!save;
+    missionCell.appendChild(mission);
 
-    tr.append(name,role,state,action);
+    const saveCell=cell("");
+    const saveBtn=document.createElement("button");
+    saveBtn.textContent=save?"SAVE":"NO SAVE";
+    saveBtn.className="good";
+    saveBtn.disabled=!save;
+    saveBtn.onclick=()=>updatePlayerSave(
+      p.id,cash.value,health.value,mission.value,saveBtn
+    );
+    saveCell.appendChild(saveBtn);
+
+    const banCell=cell("");
+    const banBtn=document.createElement("button");
+    banBtn.textContent=p.is_banned?"UNBAN":"BAN";
+    banBtn.className=p.is_banned?"good":"danger";
+
+    // Admin accounts and current admin are protected.
+    banBtn.disabled=p.role==="admin" || p.id===currentAdminId;
+    banBtn.onclick=()=>changeBan(p.id,!p.is_banned,banBtn);
+    banCell.appendChild(banBtn);
+
     $("players").appendChild(tr);
   });
 
   $("status").textContent="Player list updated.";
 }
 
-async function changeBan(id,banned){
+async function updatePlayerSave(id,cashValue,healthValue,missionValue,button){
+  const money=Number(cashValue);
+  const health=Number(healthValue);
+  const mission_index=Number(missionValue);
+
+  if(!Number.isSafeInteger(money) || money<0){
+    $("status").textContent="Cash must be a valid non-negative whole number.";
+    return;
+  }
+
+  if(!Number.isFinite(health) || health<0 || health>100){
+    $("status").textContent="Health must be between 0 and 100.";
+    return;
+  }
+
+  if(!Number.isSafeInteger(mission_index) || mission_index<0){
+    $("status").textContent="Mission must be a valid non-negative whole number.";
+    return;
+  }
+
+  button.disabled=true;
+  $("status").textContent="Saving player data...";
+
+  const {data,error}=await sb
+    .from("game_saves")
+    .update({money,health,mission_index,updated_at:new Date().toISOString()})
+    .eq("user_id",id)
+    .select("user_id")
+    .maybeSingle();
+
+  button.disabled=false;
+
+  if(error){
+    $("status").textContent="Save error: "+error.message;
+    return;
+  }
+
+  if(!data){
+    $("status").textContent="No save record found for this player.";
+    return;
+  }
+
+  $("status").textContent="Player Cash, Health and Mission updated!";
+  await loadPlayers();
+}
+
+async function changeBan(id,banned,button){
+  if(id===currentAdminId){
+    $("status").textContent="You cannot ban your own admin account.";
+    return;
+  }
+
+  if(!confirm(banned?"Ban this player?":"Unban this player?")) return;
+
+  button.disabled=true;
+
   const {error}=await sb
     .from("player_profiles")
     .update({is_banned:banned})
-    .eq("id",id);
+    .eq("id",id)
+    .neq("role","admin");
+
+  button.disabled=false;
 
   if(error){
-    $("status").textContent=error.message;
+    $("status").textContent="Ban error: "+error.message;
     return;
   }
 
   $("status").textContent=banned?"Player banned.":"Player unbanned.";
-  loadPlayers();
+  await loadPlayers();
 }
 
 $("refresh").onclick=loadPlayers;
