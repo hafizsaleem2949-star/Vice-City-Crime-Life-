@@ -189,7 +189,7 @@ button:active { transform: translateY(0) scale(.98); }
 <div id="ov"><h1>VICE CITY<br><span>CRIME LIFE</span></h1>
 <p>Marco Reyes steps off the night ferry onto Sunset Coast with a duffel bag and a debt. Find Lola Vega, take jobs, steal rides, outrun the cops and build your empire.</p>
 <p style="font-size:13px;opacity:.85">WASD move · Shift run · Space jump / handbrake · J attack / nitro · F use (enter car, shops, jobs) · Q switch weapon (red marker = gun shop) · drag mouse to look · M mute<br>Heli: Space up, J down. Touch: joystick + buttons.</p>
-<div style="font-size:11px;letter-spacing:2px;color:#35e6ff;margin:8px 0 14px">ENHANCED CITY EDITION · V1.2</div><button id="go">START</button></div>
+<div style="font-size:11px;letter-spacing:2px;color:#35e6ff;margin:8px 0 14px">CHARACTER & VEHICLE EDITION · V1.3</div><button id="go">START</button></div>
 <div id="ctl"><div id="joy"><div id="kn"></div></div>
 <div class="b" id="bJ" style="right:100px;bottom:max(40px,env(safe-area-inset-bottom))">JUMP</div>
 <div class="b" id="bA" style="right:24px;bottom:max(100px,calc(env(safe-area-inset-bottom) + 60px))">ATTACK</div>
@@ -245,6 +245,31 @@ g.add(cy(.095,.1,.16,s,0,1.86,0),sp(.055,m,-.215,2.0,0,1,1.25,1),sp(.055,m,.215,
 g.add(box(.48,.09,.29,MM(0x171923),0,.98,0),box(.09,.07,.035,MM(0xc6a34a),0,.98,.17));
 g.add(box(.31,.12,.48,sh,-.17,.08,.055),box(.31,.12,.48,sh,.17,.08,.055));
 g.add(box(.025,.48,.025,MM(0x252a36),-.12,1.36,.205),box(.025,.48,.025,MM(0x252a36),.12,1.36,.205));
+
+/* V1.3 character model detail pass: layered jacket, collar, seams, facial features and footwear */
+const jacket=MM(o.jacket??c,{roughness:.82}),dark=MM(0x20212a),metal=MM(0xb7c4d0,{metalness:.85,roughness:.22});
+g.add(
+  box(.48,.16,.34,jacket,0,1.73,.015),
+  box(.12,.12,.08,jacket,-.27,1.68,0), box(.12,.12,.08,jacket,.27,1.68,0),
+  box(.035,.55,.025,dark,0,1.38,.218),
+  box(.018,.42,.018,metal,0,1.39,.238),
+  box(.045,.045,.025,metal,0,1.55,.245),
+  box(.045,.045,.025,metal,0,1.38,.245),
+  box(.045,.045,.025,metal,0,1.21,.245),
+  box(.22,.055,.025,dark,-.23,1.48,.19),
+  box(.22,.055,.025,dark,.23,1.48,.19),
+  box(.12,.06,.025,metal,-.29,1.18,.13),
+  box(.12,.06,.025,metal,.29,1.18,.13)
+);
+const hairline=MM(o.hair??0x17120e,{roughness:.95});
+g.add(
+  sp(.19,hairline,0,2.16,-.015,1,.55,1),
+  box(.07,.025,.025,dark,-.075,2.08,.195),
+  box(.07,.025,.025,dark,.075,2.08,.195),
+  sp(.018,sh,-.075,2.015,.23,1,1,1),
+  sp(.018,sh,.075,2.015,.23,1,1,1)
+);
+
 g.legs=[l1,l2,a2,a1];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);return g}
 function mkCharOld(c,sk=0xe0b08a){const g=new T.Group(),m=MM(c),s=MM(sk),p=MM(0x222a44),L=(w,h,d,mt,x,y)=>{const q=box(w,h,d,mt,x,y,0);q.geometry.translate(0,-h/2,0);return q};
 const l1=L(.28,.9,.3,p,-.17,.9),l2=L(.28,.9,.3,p,.17,.9),a1=L(.22,.8,.22,m,-.47,1.75),a2=L(.22,.8,.22,m,.47,1.75),tor=box(.7,.9,.4,m,0,1.35,0);
@@ -269,6 +294,43 @@ else{const bus=t=='bus',tk=t=='truck';
  for(const a of t=='bike'?[[0,.7],[0,-.7]]:[[-1,.32],[1,.32],[-1,-.32],[1,-.32]]){const w=new T.Mesh(whg,MM(0x111111));w.position.set(a[0]*W/2,.38,a[1]*L);w.castShadow=true;g.add(w);if(t!='bike'){const hub=new T.Mesh(new T.CylinderGeometry(.17,.17,.315,12),MM(0x9aa5b1,{metalness:.8,roughness:.25}));hub.rotation.z=PI/2;hub.position.copy(w.position);g.add(hub)}}
  g.add(box(.4,.2,.1,hl,-W*.32,.7,L/2),box(.4,.2,.1,hl,W*.32,.7,L/2));
  if(t=='police'){const r=box(.5,.2,.4,MM(0xff0000,{emissive:0xff0000}),-.5,1.65,0),b=box(.5,.2,.4,MM(0x0044ff,{emissive:0x0044ff}),.5,1.65,0);g.add(r,b,box(W+.02,.2,L*.5,MM(0x16306e),0,.65,0));v.bars=[r,b]}}
+
+/* V1.3 vehicle detail pass: door handles, rear lamps, exhaust, grille and sport spoiler */
+if(t!=='bike' && t!=='boat' && t!=='heli'){
+  const trim2=MM(0x151a22,{metalness:.55,roughness:.32});
+  const chrome=MM(0xb9c5ce,{metalness:.9,roughness:.2});
+  const redLamp=MM(0xff3038,{emissive:0x8c0000,emissiveIntensity:.55});
+  const amber=MM(0xffb12b,{emissive:0x6b3100,emissiveIntensity:.35});
+  g.add(
+    box(W*.28,.09,.045,trim2,0,.86,L*.505),
+    box(W*.24,.12,.06,redLamp,-W*.31,.78,-L*.505),
+    box(W*.24,.12,.06,redLamp,W*.31,.78,-L*.505),
+    box(.08,.07,.025,amber,-W*.43,.79,-L*.505),
+    box(.08,.07,.025,amber,W*.43,.79,-L*.505),
+    box(.055,.055,.035,chrome,-W*.12,.78,L*.512),
+    box(.055,.055,.035,chrome,W*.12,.78,L*.512),
+    box(.13,.07,.08,trim2,-W*.27,.95,-L*.1),
+    box(.13,.07,.08,trim2,W*.27,.95,-L*.1),
+    box(.14,.09,.16,chrome,-W*.24,.3,-L*.48),
+    box(.14,.09,.16,chrome,W*.24,.3,-L*.48)
+  );
+  for(const side of [-1,1]){
+    g.add(box(.045,.055,.24,chrome,side*W*.505,1.02,0));
+    g.add(box(.08,.045,L*.72,trim2,side*W*.49,.35,0));
+  }
+  if(t==='sport'){
+    g.add(
+      box(W*.78,.10,.16,trim2,0,1.58,-L*.40),
+      box(.10,.30,.10,trim2,-W*.29,1.43,-L*.40),
+      box(.10,.30,.10,trim2,W*.29,1.43,-L*.40),
+      box(W*.9,.07,.18,MM(col??s.col,{metalness:.45,roughness:.3}),0,1.72,-L*.40)
+    );
+  }
+  if(t==='police'){
+    g.add(box(W*.7,.08,.12,MM(0x101820),0,1.86,0));
+  }
+}
+
 g.position.set(x,v.y,z);scene.add(g);V.push(v);return v}
 // state
 const P={x:-100,z:252,y:0,vy:0,h:0,hp:100,money:200,veh:null,wpn:1,owned:[1,1,0,0,0,0],ammo:[0,90,0,0,0,0],cd:0,ph:0,homes:0,reg:0},peds=[],cash=[],fx=[],MK=[];
