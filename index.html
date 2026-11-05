@@ -189,7 +189,7 @@ button:active { transform: translateY(0) scale(.98); }
 <div id="ov"><h1>VICE CITY<br><span>CRIME LIFE</span></h1>
 <p>Marco Reyes steps off the night ferry onto Sunset Coast with a duffel bag and a debt. Find Lola Vega, take jobs, steal rides, outrun the cops and build your empire.</p>
 <p style="font-size:13px;opacity:.85">WASD move · Shift run · Space jump / handbrake · J attack / nitro · F use (enter car, shops, jobs) · Q switch weapon (red marker = gun shop) · drag mouse to look · M mute<br>Heli: Space up, J down. Touch: joystick + buttons.</p>
-<button id="go">START</button></div>
+<div style="font-size:11px;letter-spacing:2px;color:#35e6ff;margin:8px 0 14px">ENHANCED CITY EDITION · V1.2</div><button id="go">START</button></div>
 <div id="ctl"><div id="joy"><div id="kn"></div></div>
 <div class="b" id="bJ" style="right:100px;bottom:max(40px,env(safe-area-inset-bottom))">JUMP</div>
 <div class="b" id="bA" style="right:24px;bottom:max(100px,calc(env(safe-area-inset-bottom) + 60px))">ATTACK</div>
@@ -240,6 +240,11 @@ const cy=(a,b,h,mt,x,y,z)=>{const q=new T.Mesh(new T.CylinderGeometry(a,b,h,10),
 const l1=limb(.85,.14,.1,p,-.17,.9),l2=limb(.85,.14,.1,p,.17,.9),a1=limb(.7,.1,.075,m,-.46,1.7),a2=limb(.7,.1,.075,m,.46,1.7);[l1,l2].forEach(l=>l.add(sp(.13,sh,0,-.86,.07,1,.55,1.7)));[a1,a2].forEach(a=>a.add(sp(.08,s,0,-.72,0,1,1,1)));
 const tor=cy(.3,.24,.85,m,0,1.35,0);tor.scale.z=.62;g.add(tor,cy(.25,.26,.14,p,0,.93,0),sp(.13,m,-.4,1.7,0,1,1,1),sp(.13,m,.4,1.7,0,1,1,1),cy(.08,.09,.14,s,0,1.82,0),sp(.2,s,0,2.02,0,1,1.15,1),sp(.215,hr,0,2.08,-.02,1,.75,1.02),l1,l2,a1,a2);
 g.add(box(.04,.04,.03,sh,-.07,2.03,.19),box(.04,.04,.03,sh,.07,2.03,.19));if(o.shades||R()<.3)g.add(box(.34,.07,.05,sh,0,2.03,.2));if(o.hat)g.add(box(.44,.1,.46,MM(o.hat),0,2.22,0),box(.44,.04,.2,MM(o.hat),0,2.18,.28));
+/* extra character detail: neck, ears, nose, belt, shoe soles and jacket seams */
+g.add(cy(.095,.1,.16,s,0,1.86,0),sp(.055,m,-.215,2.0,0,1,1.25,1),sp(.055,m,.215,2.0,0,1,1.25,1),sp(.045,s,0,2.0,.205,1,.8,1.25));
+g.add(box(.48,.09,.29,MM(0x171923),0,.98,0),box(.09,.07,.035,MM(0xc6a34a),0,.98,.17));
+g.add(box(.31,.12,.48,sh,-.17,.08,.055),box(.31,.12,.48,sh,.17,.08,.055));
+g.add(box(.025,.48,.025,MM(0x252a36),-.12,1.36,.205),box(.025,.48,.025,MM(0x252a36),.12,1.36,.205));
 g.legs=[l1,l2,a2,a1];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);return g}
 function mkCharOld(c,sk=0xe0b08a){const g=new T.Group(),m=MM(c),s=MM(sk),p=MM(0x222a44),L=(w,h,d,mt,x,y)=>{const q=box(w,h,d,mt,x,y,0);q.geometry.translate(0,-h/2,0);return q};
 const l1=L(.28,.9,.3,p,-.17,.9),l2=L(.28,.9,.3,p,.17,.9),a1=L(.22,.8,.22,m,-.47,1.75),a2=L(.22,.8,.22,m,.47,1.75),tor=box(.7,.9,.4,m,0,1.35,0);
@@ -255,7 +260,13 @@ else{const bus=t=='bus',tk=t=='truck';
  g.add(box(W,bus?2.4:.7,L,c,0,bus?1.6:.65,0));
  if(bus)g.add(box(W+.02,.8,L*.85,gl,0,2.1,0));else if(tk)g.add(box(W,1.2,L*.3,gl,0,1.5,L*.33));else if(t!='bike')g.add(box(W*.85,.6,L*.45,gl,0,1.25,-L*.05));
  if(t=='bike')g.add(box(.3,.5,.7,gl,0,1.2,-.2));
- for(const a of t=='bike'?[[0,.7],[0,-.7]]:[[-1,.32],[1,.32],[-1,-.32],[1,-.32]]){const w=new T.Mesh(whg,MM(0x111111));w.position.set(a[0]*W/2,.38,a[1]*L);w.castShadow=true;g.add(w)}
+ /* detailed glazing, bumpers, grille, mirrors and wheel hubs */
+ if(t!='bike'&&!bus){const glass=MM(0x18364b,{metalness:.35,roughness:.18}),trim=MM(0x111820,{metalness:.55,roughness:.35});
+ g.add(box(W*.76,.43,.035,glass,0,1.43,-L*.22),box(W*.76,.42,.035,glass,0,1.43,L*.22));
+ for(const side of [-1,1]){g.add(box(.035,.42,L*.42,glass,side*(W*.43),1.42,0),box(.12,.12,.22,trim,side*(W*.52),1.18,L*.22),box(.12,.12,.22,trim,side*(W*.52),1.18,-L*.22));}
+ g.add(box(W*.72,.13,.12,trim,0,.42,L*.51),box(W*.72,.13,.12,trim,0,.42,-L*.51),box(W*.42,.16,.08,trim,0,.67,L*.51));
+ }
+ for(const a of t=='bike'?[[0,.7],[0,-.7]]:[[-1,.32],[1,.32],[-1,-.32],[1,-.32]]){const w=new T.Mesh(whg,MM(0x111111));w.position.set(a[0]*W/2,.38,a[1]*L);w.castShadow=true;g.add(w);if(t!='bike'){const hub=new T.Mesh(new T.CylinderGeometry(.17,.17,.315,12),MM(0x9aa5b1,{metalness:.8,roughness:.25}));hub.rotation.z=PI/2;hub.position.copy(w.position);g.add(hub)}}
  g.add(box(.4,.2,.1,hl,-W*.32,.7,L/2),box(.4,.2,.1,hl,W*.32,.7,L/2));
  if(t=='police'){const r=box(.5,.2,.4,MM(0xff0000,{emissive:0xff0000}),-.5,1.65,0),b=box(.5,.2,.4,MM(0x0044ff,{emissive:0x0044ff}),.5,1.65,0);g.add(r,b,box(W+.02,.2,L*.5,MM(0x16306e),0,.65,0));v.bars=[r,b]}}
 g.position.set(x,v.y,z);scene.add(g);V.push(v);return v}
