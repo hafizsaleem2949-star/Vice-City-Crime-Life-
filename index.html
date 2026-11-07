@@ -98,13 +98,8 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 #cameraToggle,#weatherToggle,#pauseToggle{z-index:25;backdrop-filter:blur(8px)}
 @media(max-width:600px){#mm{width:116px!important;height:116px!important;left:10px!important;bottom:12px!important}#loc{bottom:12px;left:50%;max-width:42vw;font-size:9px}}
 
-#garageToggle{position:fixed;right:12px;top:280px;z-index:25;padding:10px 13px;border:1px solid #ffd36a;border-radius:10px;background:#08111ddd;color:#ffd36a;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer}
-#garageScreen{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;background:#050817dd;backdrop-filter:blur(9px);padding:18px}
-#garageCard{width:min(520px,94vw);max-height:80vh;overflow:auto;padding:22px;border:1px solid #35e6ff88;border-top:4px solid #35e6ff;border-radius:12px;background:linear-gradient(145deg,#142338,#080d17);box-shadow:0 20px 70px #000b}
-#garageCard h2{margin:0 0 5px;color:#35e6ff;letter-spacing:3px}#garageCard p{color:#c5d5e5;font-size:12px}#garageList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:16px 0}
-.garageCar{padding:13px;border:1px solid #ffffff35;border-radius:8px;background:#0b1424;color:#fff;text-align:left;cursor:pointer;font-size:12px}.garageCar b{display:block;color:#ffd36a;font-size:14px;margin-bottom:5px}.garageCar:disabled{opacity:.4;cursor:default}#garageClose{width:100%;padding:11px;border-radius:7px;background:#35e6ff;color:#06111a;font-size:13px}
-@media(max-width:600px){#garageToggle{top:270px;right:8px;padding:9px 10px}#garageList{grid-template-columns:1fr}}
-#rankPanel{position:fixed;left:16px;top:150px;z-index:24;width:190px;padding:9px 11px;background:#08111ddd;border:1px solid #ffd36a88;border-left:3px solid #ffd36a;border-radius:5px;color:#fff;font:11px Arial;pointer-events:auto;box-shadow:0 6px 20px #0008}#rankPanel>div:first-child{display:flex;justify-content:space-between;gap:8px}#rankName{color:#ffd36a;letter-spacing:1px}#rankLevel{color:#b9f7ff;font-weight:bold}#xpTrack{height:6px;background:#273342;border-radius:8px;margin:7px 0 5px;overflow:hidden}#xpFill{display:block;height:100%;width:0;background:linear-gradient(90deg,#35e6ff,#ffd36a);transition:width .25s}#xpText{color:#cbd5e1;font-size:9px;letter-spacing:.5px}#dailyClaim{width:100%;margin-top:8px;padding:7px 8px;border:1px solid #ffd36a88;border-radius:4px;background:linear-gradient(90deg,#a85d13,#e5b94f);color:#160f05;font-weight:900;font-size:10px;letter-spacing:1px;cursor:pointer}#dailyClaim:disabled{background:#293443;color:#9ba8b8;border-color:#536171;cursor:default}@media(max-width:600px){#rankPanel{top:145px;left:8px;width:145px;padding:7px}}
+#rankPanel{position:fixed;left:16px;top:150px;z-index:24;width:190px;padding:9px 11px;background:#08111ddd;border:1px solid #ffd36a88;border-left:3px solid #ffd36a;border-radius:5px;color:#fff;font:11px Arial;pointer-events:none;box-shadow:0 6px 20px #0008}#rankPanel>div:first-child{display:flex;justify-content:space-between;gap:8px}#rankName{color:#ffd36a;letter-spacing:1px}#rankLevel{color:#b9f7ff;font-weight:bold}#xpTrack{height:6px;background:#273342;border-radius:8px;margin:7px 0 5px;overflow:hidden}#xpFill{display:block;height:100%;width:0;background:linear-gradient(90deg,#35e6ff,#ffd36a);transition:width .25s}#xpText{color:#cbd5e1;font-size:9px;letter-spacing:.5px}@media(max-width:600px){#rankPanel{top:145px;left:8px;width:145px;padding:7px}}
+/* V2.9 REALISM PASS: articulated walking/running, idle breathing, rolling wheels and modern LED lighting */
 </style></head><body>
 
 <div id="authScreen">
@@ -122,17 +117,15 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
   </div>
 </div>
 <button id="gameAdminButton" type="button">ADMIN PANEL</button>
-<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>STREET VIEW EDITION · V3.0 · PERSONAL GARAGE</span></div>
+<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>REALISM & ANIMATION EDITION · V2.9</span></div>
 <button id="cameraToggle" type="button" aria-label="Switch camera view">CAMERA: THIRD PERSON</button>
 <button id="weatherToggle" type="button">WEATHER: AUTO</button>
 <button id="pauseToggle" type="button">PAUSE GAME</button>
-<button id="garageToggle" type="button">MY GARAGE</button>
-<div id="garageScreen"><div id="garageCard"><h2>PERSONAL GARAGE</h2><p>Your owned rides are saved with your player progress. Spawn a ride or buy up to 3 engine upgrades for extra speed and acceleration.</p><div id="garageList"></div><button id="garageClose" type="button">CLOSE GARAGE</button></div></div>
 <div id="pauseScreen"><div id="pauseCard"><h2>GAME PAUSED</h2><p>VICE CITY · CRIME LIFE</p><p style="color:#b9f7ff;font-size:12px">HAJI M WAQAS &amp; ALI HASSAN</p><button id="resumeGame">RESUME GAME</button></div></div>
 
 <div id="missionResult"><div class="mr-panel"><div class="mr-tag" id="mrTag">MISSION DEBRIEF</div><h2 id="mrTitle">MISSION COMPLETE</h2><p id="mrText">Objective completed.</p><div class="mr-reward" id="mrReward">+$0</div><button id="missionContinue" type="button">CONTINUE</button></div></div>
 <canvas id="c"></canvas>
-<div id="rankPanel"><div><b id="rankName">ROOKIE</b><span id="rankLevel">LEVEL 1</span></div><div id="xpTrack"><i id="xpFill"></i></div><small id="xpText">0 / 500 XP · 0 REP</small><button id="dailyClaim" type="button">CLAIM DAILY BONUS · $250</button></div><div class="p" id="top"><div id="mo">$0</div><div id="bar"><i id="hb"></i></div><div id="st"></div><div id="wp"></div></div>
+<div id="rankPanel"><div><b id="rankName">ROOKIE</b><span id="rankLevel">LEVEL 1</span></div><div id="xpTrack"><i id="xpFill"></i></div><small id="xpText">0 / 500 XP · 0 REP</small></div><div class="p" id="top"><div id="mo">$0</div><div id="bar"><i id="hb"></i></div><div id="st"></div><div id="wp"></div></div>
 <canvas id="mm" class="p" width="120" height="120"></canvas>
 <div class="p" id="ob"></div><div id="missionCard"><div class="mc-kicker">ACTIVE MISSION</div><div class="mc-title" id="mcTitle">MISSION</div><div class="mc-objective" id="mcObjective">Objective</div><div class="mc-meta"><span id="mcReward">REWARD $0</span><span id="mcDistance">GPS —</span></div></div><div id="loc">SUNSET COAST · EXPLORE THE CITY</div><div class="p" id="gp" style="left:50%;transform:translateX(-50%);top:84px;display:none;font-size:22px;color:#ffd23f">▲</div><div class="p" id="hi"></div><div class="p" id="ts"></div><div id="hit"></div>
 <div id="ov"><h1>VICE CITY<br><span>CRIME LIFE</span></h1>
@@ -274,23 +267,22 @@ g.add(cy(.075,.075,.16,s,0,1.82,0),box(.43,.075,.045,belt,0,1.02,.205),box(.28,.
 const nose=sp(.045,s,0,1.99,.205,1,1.2,1.4);g.add(nose);[l1,l2].forEach(l=>l.add(sp(.13,sh,0,-.86,.07,1,.55,1.7)));[a1,a2].forEach(a=>a.add(sp(.08,s,0,-.72,0,1,1,1)));
 const tor=cy(.3,.24,.85,m,0,1.35,0);tor.scale.z=.62;g.add(tor,cy(.25,.26,.14,p,0,.93,0),sp(.13,m,-.4,1.7,0,1,1,1),sp(.13,m,.4,1.7,0,1,1,1),cy(.08,.09,.14,s,0,1.82,0),sp(.2,s,0,2.02,0,1,1.15,1),sp(.215,hr,0,2.08,-.02,1,.75,1.02),l1,l2,a1,a2);
 g.add(box(.04,.04,.03,sh,-.07,2.03,.19),box(.04,.04,.03,sh,.07,2.03,.19));if(o.shades||R()<.3)g.add(box(.34,.07,.05,sh,0,2.03,.2));if(o.hat)g.add(box(.44,.1,.46,MM(o.hat),0,2.22,0),box(.44,.04,.2,MM(o.hat),0,2.18,.28));
-g.legs=[l1,l2,a2,a1];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);return g}
+g.legs=[l1,l2,a2,a1];g.arms=[a1,a2];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);return g}
 function mkCharOld(c,sk=0xe0b08a){const g=new T.Group(),m=MM(c),s=MM(sk),p=MM(0x222a44),L=(w,h,d,mt,x,y)=>{const q=box(w,h,d,mt,x,y,0);q.geometry.translate(0,-h/2,0);return q};
 const l1=L(.28,.9,.3,p,-.17,.9),l2=L(.28,.9,.3,p,.17,.9),a1=L(.22,.8,.22,m,-.47,1.75),a2=L(.22,.8,.22,m,.47,1.75),tor=box(.7,.9,.4,m,0,1.35,0);
-g.add(tor,box(.4,.4,.4,s,0,1.98,0),l1,l2,a1,a2);g.legs=[l1,l2,a2,a1];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);return g}
+g.add(tor,box(.4,.4,.4,s,0,1.98,0),l1,l2,a1,a2);g.legs=[l1,l2,a2,a1];g.arms=[a1,a2];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);return g}
 // vehicles
-let garageUpgrades={};
 const VS={sport:{w:2,l:4.4,sp:48,ac:34,col:0xff2d78,tr:2.1},sedan:{w:1.9,l:4.4,sp:32,ac:18,col:0x35c4e0,tr:2},truck:{w:2.4,l:6.5,sp:28,ac:12,col:0xe8a33d,tr:1.5},bus:{w:2.8,l:9,sp:22,ac:9,col:0x2fb36d,tr:1.1},bike:{w:.8,l:2,sp:44,ac:32,col:0xffd23f,tr:2.8},police:{w:2,l:4.5,sp:45,ac:32,col:0xf2f2f2,tr:2.1},boat:{w:2.6,l:6.5,sp:36,ac:20,col:0xffffff,tr:1.2},heli:{w:2.4,l:7,sp:38,ac:16,col:0xc23b3b,tr:1.4}};
 for(const k in VS)VS[k].t=k;
 const V=[],whg=new T.CylinderGeometry(.38,.38,.3,10).rotateZ(PI/2),hl=MM(0xffffcc,{emissive:0xffffaa});
-function mkV(t,x,z,h,col){const s={...VS[t]},up=Math.max(0,Math.min(3,Number(garageUpgrades[t])||0));s.sp*=1+up*.12;s.ac*=1+up*.10;const g=new T.Group(),c=MM(col??s.col),gl=MM(0x1a2230,{metalness:.8,roughness:.1}),L=s.l,W=s.w,v={m:g,s,x,z,y:t=='boat'?-.2:0,h,vx:0,vz:0,f:0,hp:100,drv:null,ai:0,r:Math.max(W,L*.4)*.55,cop:t=='police',bars:[],dead:0};
+function mkV(t,x,z,h,col){const s=VS[t],g=new T.Group(),c=MM(col??s.col),gl=MM(0x1a2230,{metalness:.8,roughness:.1}),L=s.l,W=s.w,v={m:g,s,x,z,y:t=='boat'?-.2:0,h,vx:0,vz:0,f:0,hp:100,drv:null,ai:0,r:Math.max(W,L*.4)*.55,cop:t=='police',bars:[],wheels:[],dead:0};
 if(t=='boat')g.add(box(W,.8,L,c,0,.2,0),box(W*.6,.8,L*.3,gl,0,.9,-L*.1));
 else if(t=='heli'){g.add(box(W,1.6,L*.5,c,0,1.4,0),box(.5,.5,L*.5,c,0,1.7,-L*.5),box(W*.8,.9,1,gl,0,1.5,L*.2));v.rot=box(L*1.3,.08,.3,gl,0,2.4,0);g.add(v.rot)}
 else{const bus=t=='bus',tk=t=='truck';
  g.add(box(W,bus?2.4:.7,L,c,0,bus?1.6:.65,0));
  if(bus)g.add(box(W+.02,.8,L*.85,gl,0,2.1,0));else if(tk)g.add(box(W,1.2,L*.3,gl,0,1.5,L*.33));else if(t!='bike')g.add(box(W*.85,.6,L*.45,gl,0,1.25,-L*.05));
  if(t=='bike')g.add(box(.3,.5,.7,gl,0,1.2,-.2));
- for(const a of t=='bike'?[[0,.7],[0,-.7]]:[[-1,.32],[1,.32],[-1,-.32],[1,-.32]]){const w=new T.Mesh(whg,MM(0x111111,{roughness:.96}));w.position.set(a[0]*W/2,.38,a[1]*L);w.castShadow=true;g.add(w);
+ for(const a of t=='bike'?[[0,.7],[0,-.7]]:[[-1,.32],[1,.32],[-1,-.32],[1,-.32]]){const w=new T.Mesh(whg,MM(0x111111,{roughness:.96}));w.position.set(a[0]*W/2,.38,a[1]*L);w.castShadow=true;g.add(w);v.wheels.push(w);
  if(t!='bike'){const rim=new T.Mesh(new T.CylinderGeometry(.19,.19,.315,12).rotateZ(PI/2),MM(0x9aa8b8,{metalness:.8,roughness:.25}));rim.position.copy(w.position);g.add(rim)}}
  // front/rear bumpers, grille, mirrors and glass highlights
  if(t!='bike'){
@@ -301,16 +293,17 @@ else{const bus=t=='bus',tk=t=='truck';
   g.add(box(.12,.18,.18,gl,-W*.52,1.08,L*.12),box(.12,.18,.18,gl,W*.52,1.08,L*.12));
  }
  g.add(box(.4,.2,.1,hl,-W*.32,.7,L/2),box(.4,.2,.1,hl,W*.32,.7,L/2));
+ // V2.9: modern LED daytime lights and red rear lamps
+ const led=MM(0xdff8ff,{emissive:0x9edfff,emissiveIntensity:1.8}),tail=MM(0xff263b,{emissive:0xff1028,emissiveIntensity:1.25});
+ g.add(box(W*.58,.055,.045,led,0,.82,L*.505),box(W*.58,.09,.045,tail,0,.76,-L*.505));
  if(t=='police'){const r=box(.5,.2,.4,MM(0xff0000,{emissive:0xff0000}),-.5,1.65,0),b=box(.5,.2,.4,MM(0x0044ff,{emissive:0x0044ff}),.5,1.65,0);g.add(r,b,box(W+.02,.2,L*.5,MM(0x16306e),0,.65,0));v.bars=[r,b]}}
 g.position.set(x,v.y,z);scene.add(g);V.push(v);return v}
 // state
 const P={x:-100,z:252,y:0,vy:0,h:0,hp:100,money:200,veh:null,wpn:1,owned:[1,1,0,0,0,0],ammo:[0,90,0,0,0,0],cd:0,ph:0,homes:0,reg:0},peds=[],cash=[],fx=[],MK=[];
 // Register landmark minimap markers only after MK has been initialized.
 for(const L of landmarkData)MK.push({x:L.x,z:L.z,type:'landmark',col:L.color});
-let heat=0,tod=17,rain=false,started=false,time=0,yaw=PI,pit=.24,lastDrag=-9,mIdx=0,cur=null,mu=0,AC,xp=0,rep=0,dailyClaim='';
+let heat=0,tod=17,rain=false,started=false,time=0,yaw=PI,pit=.24,lastDrag=-9,mIdx=0,cur=null,mu=0,AC,xp=0,rep=0;
 let cameraMode='third',worldMode='auto',paused=false;
-let ownedCars=['sport','bike'];
-const carInfo={sport:['BANSHEE GT','High speed · $4,000'],bike:['STREET BIKE','Quick handling · Starter'],sedan:['CITY SEDAN','Balanced · $1,800'],truck:['HEAVY TRUCK','Durable · $2,500'],bus:['CITY BUS','Heavy · $3,000'],boat:['COASTAL BOAT','Water travel · $2,200'],heli:['CITY HELICOPTER','Air travel · $8,000']};
 P.m=mkChar(0x2b6cb0,0xe0b08a,{pants:0x1d2740,hair:0x1a1209,shades:1});scene.add(P.m);
 function mkPed(t,x,z){const m=mkChar(t=='cop'?0x1a2d6b:t=='gang'?0x7a1b1b:[0xe8e8e8,0x2e6f95,0xc84b4b,0x3c8d5a,0xe2b43c,0x6a4c93,0x222222,0xf08cb4][Math.floor(R()*8)],[0xf1c9a5,0xe0b08a,0xc68a5e,0x8a5a3c,0x5a3a26][Math.floor(R()*5)],t=='cop'?{hat:0x16306e,pants:0x14203f,hair:0x1a1209}:t=='gang'?{pants:0x222222,hair:0x0a0a0a,shades:1}:{});scene.add(m);if(t!='civ'){m.gun.visible=true}
 const p={m,x,z,t,hp:t=='civ'?40:t=='cop'?70:60,a:R()*6,w:0,fl:0,cd:rr(.5,2),dead:0,ph:0};m.position.set(x,0,z);peds.push(p);return p}
@@ -391,7 +384,7 @@ if(p.t=='civ'){if(p.fl>0){ang=Math.atan2(-dx,-dz);sp=6}else{p.w-=dt;if(p.w<0){p.
 else if(p.t=='gang'||heat>0||p.fl>0){if(d<55){ang=Math.atan2(dx,dz);sp=d>12?(p.t=='cop'?5.5:4.5):d<7?-2:0;p.cd-=dt;if(d<35&&p.cd<=0&&P.hp>0){p.cd=rr(.8,1.4);noise(.2,1200,.1);const hit=R()<.4;tracer(p.x,1.4,p.z,P.x+(hit?0:rr(-2,2)),1.3,P.z+(hit?0:rr(-2,2)),0xff6060);if(hit)hurtP(p.t=='cop'?7:5)}}}
 if(sp){p.m.rotation.y=ang;p.x+=S(ang)*sp*dt;p.z+=Co(ang)*sp*dt;p.ph+=sp*dt*2.2;p.a=ang}
 col(p,.5);if(!inLand(p.x,p.z)){p.x=C(p.x,-268,268);p.z=C(p.z,-268,268);p.a+=PI}
-m.position.set(p.x,0,p.z);m.legs.forEach((l,i)=>l.rotation.x=sp?S(p.ph)*.8*(i%2?-1:1):0);if(p.fl>0)m.rotation.z=0}
+m.position.set(p.x,Math.abs(sp)?Math.abs(S(p.ph*2))*.035:0,p.z);m.legs.forEach((l,i)=>l.rotation.x=sp?S(p.ph)*.82*(i%2?-1:1):S(time*1.5+i)*.025);if(m.arms)m.arms.forEach((a,i)=>a.rotation.x=sp?S(p.ph)*.48*(i%2?1:-1):S(time*1.2+i)*.018);if(p.fl>0)m.rotation.z=0}
 // player
 function updP(dt){const fw=C((K.KeyW||K.ArrowUp?1:0)-(K.KeyS||K.ArrowDown?1:0)-jy,-1,1),rt=C((K.KeyD||K.ArrowRight?1:0)-(K.KeyA||K.ArrowLeft?1:0)+jx,-1,1);
 P.cd-=dt;P.reg-=dt;if(P.reg<0&&P.hp<100&&heat<1)P.hp=Math.min(100,P.hp+2*dt);
@@ -401,7 +394,7 @@ const sp=K.ShiftLeft||K.ShiftRight,w=!inLand(P.x,P.z);let dx=S(yaw)*fw-Co(yaw)*r
 if(m>.05){spd=(w?3:sp||m>.85?8.5:4.5)*Math.min(1,m);P.h+=nA(Math.atan2(dx,dz)-P.h)*Math.min(1,dt*14);P.x+=dx/m*spd*dt;P.z+=dz/m*spd*dt;P.ph+=spd*dt*2.2;if(!w&&P.y==0&&(P.stp=(P.stp||0)-dt)<0){P.stp=.5-spd*.02;noise(.05,900,.05)}}
 const fl=w?-1.1:0;if(K.Space&&P.y<=fl+.01&&!w)P.vy=7.5;P.vy-=22*dt;P.y+=P.vy*dt;if(P.y<=fl){P.y=fl;P.vy=0}
 col(P,.5,P.y);if(K.KeyJ)fire();if(P.fl>0)P.fl-=dt;
-const g=P.m;g.position.set(P.x,P.y,P.z);g.rotation.y=P.h;g.gun.visible=P.wpn>0;g.legs.forEach((l,i)=>l.rotation.x=spd?S(P.ph)*.9*(i%2?-1:1):0);if(P.fl>0||P.sw)g.legs[2].rotation.x=-1.5;if(P.cd<.1)P.sw=0;
+const g=P.m;g.position.set(P.x,P.y+(spd?Math.abs(S(P.ph*2))*.045:0),P.z);g.rotation.y=P.h;g.gun.visible=P.wpn>0;g.legs.forEach((l,i)=>l.rotation.x=spd?S(P.ph)*.92*(i%2?-1:1):0);if(g.arms)g.arms.forEach((a,i)=>a.rotation.x=spd?S(P.ph)*.52*(i%2?1:-1):0);if(P.fl>0||P.sw){g.legs[2].rotation.x=-1.5;if(g.arms)g.arms[0].rotation.x=-.9;}if(P.cd<.1)P.sw=0;
 for(const c of cash.splice(0).filter(c=>{if(H(c.x-P.x,c.z-P.z)<1.8){P.money+=c.v;scene.remove(c.m);noise(.1,3000,.05);return false}return true}))cash.push(c)}
 const WS=[{n:'Fists',cd:.45,d:14,r:2.4},{n:'Pistol',cd:.3,d:28,r:60},{n:'SMG',cd:.09,d:13,r:55},{n:'Shotgun',cd:.9,d:60,r:25},{n:'Assault Rifle',cd:.13,d:22,r:90},{n:'Rocket Launcher',cd:1.6,d:0,r:70}],GP=[0,0,800,1200,2000,3500];
 function fire(){const w=P.wpn,s=WS[w];if(P.cd>0||(w&&P.ammo[w]<=0))return;P.cd=s.cd;let best=null,bs=1e9;for(const p of peds){if(p.dead)continue;const ex=p.x-P.x,ez=p.z-P.z,d=H(ex,ez);if(d>s.r||d<.1)continue;const a=Math.abs(nA(Math.atan2(ex,ez)-P.h));if(a<(w?.35:.9)&&a*d+d*.02<bs){bs=a*d+d*.02;best=p}}
@@ -425,7 +418,7 @@ const lab=m=>m.type=='mission'?'Talk — take a job':m.type=='gun'?(()=>{const n
 function act(m){const buy=n=>{if(P.money<n){toast('Not enough cash');return 0}P.money-=n;return 1};
 if(m.type=='mission')startM();
 else if(m.type=='gun'){const w=P.wpn,n=P.owned.findIndex((o,i)=>i>1&&!o);if(w&&P.ammo[w]<30){if(buy(100)){P.ammo[w]+=[0,60,150,15,90,4][w];toast('Ammo restocked')}}else if(n>0){if(buy(GP[n])){P.owned[n]=1;P.ammo[n]=[0,0,200,30,150,6][n];P.wpn=n;toast(WS[n].n+' acquired')}}else toast('Ammo is full')}
-else if(m.type=='dealer'){if(ownedCars.includes('sport'))toast('Banshee GT is already in your garage');else if(buy(4000)){ownedCars.push('sport');mkV('sport',m.x-6.5,m.z,0,Math.floor(R()*0xffffff));toast('Banshee GT added to your garage');save();renderGarage()}}
+else if(m.type=='dealer'){if(buy(4000)){mkV('sport',m.x-6.5,m.z,0,Math.floor(R()*0xffffff));toast('Your new ride is waiting')}}
 else if(m.type=='cloth'){if(buy(250)){P.m.tor.material.color.setHex(Math.floor(R()*0xffffff));toast('Fresh fit!')}}
 else if(!m.own){if(buy(6000)){m.own=1;P.homes++;toast('Safehouse bought: +$75 / 20s')}}else{P.hp=100;tod=7;toast('Rested until morning. Progress saved.');save()}}
 // missions
@@ -454,16 +447,12 @@ function endM(ok,msg){
  if(ok)toast('MISSION PASSED  +$'+reward);else toast(msg||'Mission failed');
  }
 $('missionContinue').addEventListener('click',()=>{$('missionResult').style.display='none';});
-function renderGarage(){const list=$('garageList');if(!list)return;list.innerHTML='';ownedCars.forEach(type=>{const info=carInfo[type]||[type.toUpperCase(),'Personal vehicle'];const level=Math.max(0,Math.min(3,Number(garageUpgrades[type])||0));const b=document.createElement('button');b.className='garageCar';b.innerHTML='<b>'+info[0]+'</b>'+info[1]+'<br><span style="color:#35e6ff">SPAWN VEHICLE →</span><br><small style="color:#ffd36a">ENGINE LEVEL '+level+'/3 · SPEED +'+(level*12)+'%</small>';b.addEventListener('click',()=>spawnOwnedCar(type));list.appendChild(b);const u=document.createElement('button');u.className='garageCar';u.innerHTML='<b>⚙ ENGINE UPGRADE</b>'+(level>=3?'MAX LEVEL':'Improve speed & acceleration')+'<br><span style="color:#ffd36a">'+(level>=3?'FULLY UPGRADED':'UPGRADE · $'+(1200+level*1000))+'</span>';u.disabled=level>=3;u.addEventListener('click',()=>{const cost=1200+level*1000;if(P.money<cost)return toast('Not enough cash · Need $'+cost);P.money-=cost;garageUpgrades[type]=level+1;save();renderGarage();toast(info[0]+' engine upgraded to level '+(level+1))});list.appendChild(u)})}
-function spawnOwnedCar(type){if(!started)return toast('Enter the city first');if(P.veh)exitV(true);const x=C(P.x+Math.sin(P.h)*5,-255,255),z=C(P.z+Math.cos(P.h)*5,-255,255);const v=mkV(type,x,z,P.h);$('garageScreen').style.display='none';enterV(v);save();toast((carInfo[type]||[type])[0]+' ready')}
-$('garageToggle').addEventListener('click',()=>{renderGarage();$('garageScreen').style.display='flex'});$('garageClose').addEventListener('click',()=>$('garageScreen').style.display='none');
-$('dailyClaim').addEventListener('click',()=>{const today=new Date().toLocaleDateString('en-CA');if(dailyClaim===today)return toast('Daily bonus already claimed');dailyClaim=today;P.money+=250;xp+=50;rep+=1;save();toast('Daily bonus claimed: +$250 · +50 XP');});
 function updM(dt){if(!cur)return;const m=cur;if(m.t){m.t-=dt;if(m.t<=0)return endM(0,'Time is up!')}
 if(m.k=='kill'){const a=m.en.filter(e=>!e.dead).length;m.ob='Eliminate the crew ('+a+' left)';if(!a)endM(1);return}
 const p=m.pts[m.i],pr=P.veh||P;if(H(pr.x-p[0],pr.z-p[1])<(m.k=='race'?10:6)){if(m.k=='boat'&&!(P.veh&&P.veh.s.t=='boat'))return;m.i++;noise(.2,2500,.1);if(m.i>=m.pts.length)return endM(1);m.ob=m.k=='race'?'Checkpoint '+(m.i+1)+'/6':'Deliver the package'}}
 // persistence
-function save(){try{localStorage.setItem('vccl',JSON.stringify({m:P.money,o:P.owned,i:mIdx,xp,rep,dailyClaim,cars:ownedCars,upg:garageUpgrades}))}catch(e){}if(typeof window.save==='function')window.save()}
-try{const s=JSON.parse(localStorage.getItem('vccl')||'null');if(s){P.money=s.m;P.owned=s.o.concat([0,0,0,0,0,0]).slice(0,6);P.owned.forEach((o,i)=>{if(o&&i)P.ammo[i]=[0,90,200,30,150,6][i]});mIdx=s.i;xp=Math.max(0,Number(s.xp)||0);rep=Math.max(0,Number(s.rep)||0);dailyClaim=typeof s.dailyClaim==='string'?s.dailyClaim:'';if(Array.isArray(s.cars))ownedCars=[...new Set(s.cars.filter(c=>carInfo[c]))];if(s.upg&&typeof s.upg==='object')garageUpgrades=Object.fromEntries(Object.entries(s.upg).filter(([k,v])=>carInfo[k]&&Number.isFinite(Number(v))).map(([k,v])=>[k,Math.max(0,Math.min(3,Number(v)))]))}}catch(e){}
+function save(){try{localStorage.setItem('vccl',JSON.stringify({m:P.money,o:P.owned,i:mIdx,xp,rep}))}catch(e){}}
+try{const s=JSON.parse(localStorage.getItem('vccl')||'null');if(s){P.money=s.m;P.owned=s.o.concat([0,0,0,0,0,0]).slice(0,6);P.owned.forEach((o,i)=>{if(o&&i)P.ammo[i]=[0,90,200,30,150,6][i]});mIdx=s.i;xp=Math.max(0,Number(s.xp)||0);rep=Math.max(0,Number(s.rep)||0)}}catch(e){}
 // environment
 const C1=new T.Color(),sd=new T.Color(0x7fd4ff),sn=new T.Color(0x070722),sk=new T.Color(0xff6f9c),gy=new T.Color(0x6b7782);scene.background=C1;scene.fog=new T.Fog(C1,120,520);
 const hlt=new T.SpotLight(0xfff2cc,0,90,.6,.5);scene.add(hlt,hlt.target);
@@ -487,7 +476,7 @@ function loop(ts){requestAnimationFrame(loop);const dt=Math.min(.05,(ts-last)/10
 function update(dt){time+=dt;if(P.hp>0)updP(dt);else if(P.veh)drive(P.veh,0,0,1,0,dt);
 for(const v of V){if(v.hp<=0&&v.dead>0){v.dead-=dt;if(v.dead<=0&&v.drv!='p'){rmV(v);continue}}
 if(v.drv=='p'){}else if(v.cop&&v.hp>0)police(v,dt);else if(v.ai&&v.hp>0)traffic(v,dt);else drive(v,0,0,0,0,dt);
-vstep(v,dt);v.m.position.set(v.x,v.y,v.z);v.m.rotation.y=v.h;if(v.rot)v.rot.rotation.y+=dt*(v.drv=='p'?25:0);if(v.bars[0]){const f=Math.floor(time*6)%2;v.bars[0].visible=f;v.bars[1].visible=!f}
+vstep(v,dt);if(v.wheels&&v.wheels.length){const spin=(v.drv=='p'||v.ai?Math.abs(v.f):0)*dt*1.9;for(const wh of v.wheels)wh.rotation.x+=spin;}v.m.position.set(v.x,v.y,v.z);v.m.rotation.y=v.h;if(v.rot)v.rot.rotation.y+=dt*(v.drv=='p'?25:0);if(v.bars[0]){const f=Math.floor(time*6)%2;v.bars[0].visible=f;v.bars[1].visible=!f}
 if(v.s.t=='heli'&&v.y>0&&!v.drv){v.y=Math.max(0,v.y-6*dt)}}
 for(const p of [...peds])pedAI(p,dt);
 for(const f of [...fx]){f.life-=dt;if(f.grow){f.o.scale.multiplyScalar(1+dt*14);f.o.material.opacity=f.life}if(f.life<=0){scene.remove(f.o);fx.splice(fx.indexOf(f),1)}}
@@ -521,7 +510,7 @@ env(dt);mini();
 if(AC){const sp=P.veh?Math.abs(P.veh.f):0;engG.gain.value=!mu&&P.veh?.04:0;if(P.veh)eng.frequency.value=P.veh.s.t=='heli'?60+(P.veh.y>1?30:0):38+sp*4.5;
 sirG.gain.value=!mu&&stars>0&&V.some(v=>v.cop&&H(v.x-tg.x,v.z-tg.z)<100)?.018:0;sir.frequency.value=700+250*S(time*7)}
 // HUD
-const level=Math.floor(xp/500)+1,rank=level>=20?'VICE LEGEND':level>=12?'KINGPIN':level>=7?'ENFORCER':level>=3?'STREET SOLDIER':'ROOKIE';$('rankName').textContent=rank;$('rankLevel').textContent='LEVEL '+level;$('xpFill').style.width=(xp%500/5)+'%';$('xpText').textContent=(xp%500)+' / 500 XP · '+rep+' REP';const today=new Date().toLocaleDateString('en-CA');$('dailyClaim').disabled=dailyClaim===today;$('dailyClaim').textContent=dailyClaim===today?'DAILY BONUS CLAIMED':'CLAIM DAILY BONUS · $250';$('mo').textContent='$'+P.money.toLocaleString();$('hb').style.width=Math.max(0,P.hp)+'%';$('st').textContent='★'.repeat(stars)+'☆'.repeat(5-stars);
+const level=Math.floor(xp/500)+1,rank=level>=20?'VICE LEGEND':level>=12?'KINGPIN':level>=7?'ENFORCER':level>=3?'STREET SOLDIER':'ROOKIE';$('rankName').textContent=rank;$('rankLevel').textContent='LEVEL '+level;$('xpFill').style.width=(xp%500/5)+'%';$('xpText').textContent=(xp%500)+' / 500 XP · '+rep+' REP';$('mo').textContent='$'+P.money.toLocaleString();$('hb').style.width=Math.max(0,P.hp)+'%';$('st').textContent='★'.repeat(stars)+'☆'.repeat(5-stars);
 $('wp').textContent=P.veh?(P.veh.s.t.toUpperCase()+'  '+Math.round(Math.abs(P.veh.f)*3.6)+' km/h  HP '+Math.round(P.veh.hp)):WS[P.wpn].n+(P.wpn?'  '+P.ammo[P.wpn]:'')+'  ·  '+String(Math.floor(tod)).padStart(2,'0')+':00'+(rain?' 🌧':'');
 const ob=$('ob');if(cur){ob.style.display='block';ob.textContent=cur.ti+': '+cur.ob+(cur.t?'  ⏱'+Math.ceil(cur.t)+'s':'');const p=cur.pts[cur.k=='kill'?0:cur.i];beam.visible=true;beam.position.set(p[0],35,p[1]);{const ddx=p[0]-tg.x,ddz=p[1]-tg.z,ang=Math.atan2(-ddx*Co(yaw)+ddz*S(yaw),ddx*S(yaw)+ddz*Co(yaw)),gp=$('gp');gp.style.display='block';gp.style.transform=`translateX(-50%) rotate(${ang}rad)`;ob.textContent+='  '+Math.round(H(ddx,ddz))+'m'}}else{ob.style.display='none';$('gp').style.display='none'}
 // V2.6 persistent mission card with reward, objective, timer and live distance
@@ -682,9 +671,6 @@ requestAnimationFrame(loop);
     if (Number.isFinite(Number(data.health))) P.hp = Math.max(1, Math.min(100, Number(data.health)));
     if (Number.isFinite(Number(data.mission_index))) mIdx = Math.max(0, Number(data.mission_index));
     const gd = data.game_data || {};
-    xp = Math.max(0, Number(gd.xp) || xp); rep = Math.max(0, Number(gd.rep) || rep);
-    dailyClaim = typeof gd.daily_claim === 'string' ? gd.daily_claim : dailyClaim;
-    if (Array.isArray(gd.owned_cars)) ownedCars = [...new Set(gd.owned_cars.filter(c => carInfo[c]))];
     if (Array.isArray(gd.owned_weapons)) {
       P.owned = gd.owned_weapons.concat([0,0,0,0,0,0]).slice(0,6).map(Boolean);
       P.owned[0] = 1;
@@ -701,7 +687,7 @@ requestAnimationFrame(loop);
   function saveLocalOnly() {
     try {
       localStorage.setItem('vccl', JSON.stringify({
-        m: P.money, o: P.owned, i: mIdx, xp, rep, dailyClaim
+        m: P.money, o: P.owned, i: mIdx
       }));
     } catch (_) {}
   }
@@ -734,7 +720,6 @@ requestAnimationFrame(loop);
         game_data: {
           owned_weapons: P.owned,
           ammo: P.ammo,
-          xp, rep, daily_claim: dailyClaim, owned_cars: ownedCars,
           position: { x: P.x, z: P.z }
         },
         updated_at: new Date().toISOString()
