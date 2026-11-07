@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Vice City: Crime Life — V2.5 Story Edition</title>
+<title>Vice City: Crime Life — V2.7 Street View Edition</title>
 <style>
 :root{--g:#000a;--pk:#ff3b8d;--cy:#35e6ff}
 html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px system-ui,sans-serif;color:#fff;touch-action:none;user-select:none;-webkit-user-select:none}
@@ -79,6 +79,25 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 #missionCard .mc-meta{display:flex;justify-content:space-between;gap:8px;margin-top:9px;padding-top:8px;border-top:1px solid #ffffff22;font-size:11px;color:#ffd36a}
 @media(max-width:600px){#missionCard{right:8px;bottom:160px;width:min(260px,58vw);padding:9px 11px}#missionCard .mc-title{font-size:13px}}
 
+
+/* V2.6 mission debrief overlay */
+#missionResult{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,#050914dd,#090d19ee);backdrop-filter:blur(9px);pointer-events:auto;padding:18px}
+#missionResult .mr-panel{width:min(520px,94vw);border:1px solid #ffd36a88;border-top:4px solid #ffd36a;background:linear-gradient(145deg,#121d2c,#080d17);padding:26px;border-radius:12px;box-shadow:0 22px 70px #000b}
+#missionResult .mr-tag{font-size:10px;letter-spacing:4px;color:#ffd36a;font-weight:900}
+#missionResult h2{font-size:clamp(26px,5vw,42px);margin:9px 0;color:#fff;letter-spacing:1px}
+#missionResult p{color:#c8d4e3;line-height:1.55;margin:8px 0 18px}
+#missionResult .mr-reward{font-size:24px;font-weight:900;color:#8cffb0;margin:12px 0 20px}
+#missionContinue{width:100%;border:0;border-radius:7px;padding:14px;background:linear-gradient(90deg,#ffb83d,#ffe18a);color:#17120a;font-weight:1000;letter-spacing:2px;cursor:pointer}
+
+
+/* V2.7: GTA-inspired street HUD and minimap placement */
+#mm{left:22px!important;right:auto!important;top:auto!important;bottom:22px!important;width:158px!important;height:158px!important;border:3px solid #d7e3e8!important;box-shadow:0 5px 22px #000b,0 0 0 3px #101923aa;border-radius:50%!important;z-index:20}
+#top{z-index:22;min-width:148px;border:1px solid #ffffff26;box-shadow:0 5px 18px #0008}
+#missionCard{z-index:22;box-shadow:0 6px 24px #0009}
+#loc{left:50%;transform:translateX(-50%);bottom:20px;top:auto;max-width:48vw;text-align:center;z-index:21}
+#cameraToggle,#weatherToggle,#pauseToggle{z-index:25;backdrop-filter:blur(8px)}
+@media(max-width:600px){#mm{width:116px!important;height:116px!important;left:10px!important;bottom:12px!important}#loc{bottom:12px;left:50%;max-width:42vw;font-size:9px}}
+
 </style></head><body>
 
 <div id="authScreen">
@@ -96,12 +115,13 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
   </div>
 </div>
 <button id="gameAdminButton" type="button">ADMIN PANEL</button>
-<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>DOWNTOWN STORY EDITION · V2.5</span></div>
+<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>STREET VIEW EDITION · V2.7</span></div>
 <button id="cameraToggle" type="button" aria-label="Switch camera view">CAMERA: THIRD PERSON</button>
 <button id="weatherToggle" type="button">WEATHER: AUTO</button>
 <button id="pauseToggle" type="button">PAUSE GAME</button>
 <div id="pauseScreen"><div id="pauseCard"><h2>GAME PAUSED</h2><p>VICE CITY · CRIME LIFE</p><p style="color:#b9f7ff;font-size:12px">HAJI M WAQAS &amp; ALI HASSAN</p><button id="resumeGame">RESUME GAME</button></div></div>
 
+<div id="missionResult"><div class="mr-panel"><div class="mr-tag" id="mrTag">MISSION DEBRIEF</div><h2 id="mrTitle">MISSION COMPLETE</h2><p id="mrText">Objective completed.</p><div class="mr-reward" id="mrReward">+$0</div><button id="missionContinue" type="button">CONTINUE</button></div></div>
 <canvas id="c"></canvas>
 <div class="p" id="top"><div id="mo">$0</div><div id="bar"><i id="hb"></i></div><div id="st"></div><div id="wp"></div></div>
 <canvas id="mm" class="p" width="120" height="120"></canvas>
@@ -407,7 +427,21 @@ if(k=='race'){m.pts=[1,2,3,4,5,6].map(wpt);m.t=80;m.ti='Street Sprint';m.ob='Che
 if(k=='kill'){m.ti='Clear the Docks';for(let j=0;j<4+Math.floor(i/5);j++)m.en.push(mkPed('gang',m.pts[0][0]+rr(-7,7),m.pts[0][1]+rr(-7,7)))}
 if(k=='boat'){m.pts=[[R()<.5?-320:320,rr(-200,200)]];m.t=100;m.ti='Buoy Run';m.ob='Reach the buoy in your boat'}
 cur=m;toast(m.ti+' — '+n+' needs you')}
-function endM(ok,msg){if(ok){P.money+=cur.rw;toast('MISSION PASSED  +$'+cur.rw);mIdx++;save()}else toast(msg||'Mission failed');cur=null;beam.visible=false}
+function endM(ok,msg){
+ if(!cur)return;
+ const finished=cur, reward=ok?finished.rw:0;
+ if(ok){P.money+=reward;mIdx++;save()}
+ cur=null;beam.visible=false;
+ const panel=$('missionResult');
+ $('mrTag').textContent=ok?'VICE CITY · STORY PROGRESS':'VICE CITY · MISSION FAILED';
+ $('mrTitle').textContent=ok?'MISSION COMPLETE':'MISSION FAILED';
+ $('mrText').textContent=ok?'Objective secured. Your reputation is growing. Return to a yellow mission marker for the next job.':(msg||'The objective was not completed. Return to a yellow mission marker and try again.');
+ $('mrReward').textContent=ok?'+$'+reward.toLocaleString():'NO REWARD';
+ $('missionContinue').textContent=ok?'CONTINUE STORY':'RETURN TO CITY';
+ panel.style.display='flex';
+ if(ok)toast('MISSION PASSED  +$'+reward);else toast(msg||'Mission failed');
+ }
+$('missionContinue').addEventListener('click',()=>{$('missionResult').style.display='none';});
 function updM(dt){if(!cur)return;const m=cur;if(m.t){m.t-=dt;if(m.t<=0)return endM(0,'Time is up!')}
 if(m.k=='kill'){const a=m.en.filter(e=>!e.dead).length;m.ob='Eliminate the crew ('+a+' left)';if(!a)endM(1);return}
 const p=m.pts[m.i],pr=P.veh||P;if(H(pr.x-p[0],pr.z-p[1])<(m.k=='race'?10:6)){if(m.k=='boat'&&!(P.veh&&P.veh.s.t=='boat'))return;m.i++;noise(.2,2500,.1);if(m.i>=m.pts.length)return endM(1);m.ob=m.k=='race'?'Checkpoint '+(m.i+1)+'/6':'Deliver the package'}}
@@ -462,8 +496,8 @@ if(cameraMode==='first'){
   cam.lookAt(eyeX+S(yaw)*18,eyeY+S(pit)*5,eyeZ+Co(yaw)*18);
   if(!P.veh)P.m.visible=false;
 }else{
-  const dist=P.veh?({bus:17,heli:16,boat:14}[P.veh.s.t]||11)+Math.abs(P.veh.f)*.08:8.2,cx=tg.x-S(yaw)*dist*Co(pit),cz=tg.z-Co(yaw)*dist*Co(pit),cy=(tg.y||0)+2.0+dist*S(pit);
-  cam.position.lerp(new T.Vector3(cx,Math.max(.8,cy),cz),Math.min(1,dt*7));cam.lookAt(tg.x,(tg.y||0)+1.62,tg.z);
+  const dist=P.veh?({bus:17,heli:16,boat:14}[P.veh.s.t]||11)+Math.abs(P.veh.f)*.08:7.1,shoulder=P.veh?0.25:0.62,cx=tg.x-S(yaw)*dist*Co(pit)+Co(yaw)*shoulder,cz=tg.z-Co(yaw)*dist*Co(pit)-S(yaw)*shoulder,cy=(tg.y||0)+1.85+dist*S(pit);
+  cam.position.lerp(new T.Vector3(cx,Math.max(.8,cy),cz),Math.min(1,dt*5.5));cam.lookAt(tg.x+Co(yaw)*.22,(tg.y||0)+1.48,tg.z-S(yaw)*.22);
   P.m.visible=!P.veh;
 }
 env(dt);mini();
@@ -474,7 +508,7 @@ sirG.gain.value=!mu&&stars>0&&V.some(v=>v.cop&&H(v.x-tg.x,v.z-tg.z)<100)?.018:0;
 $('mo').textContent='$'+P.money.toLocaleString();$('hb').style.width=Math.max(0,P.hp)+'%';$('st').textContent='★'.repeat(stars)+'☆'.repeat(5-stars);
 $('wp').textContent=P.veh?(P.veh.s.t.toUpperCase()+'  '+Math.round(Math.abs(P.veh.f)*3.6)+' km/h  HP '+Math.round(P.veh.hp)):WS[P.wpn].n+(P.wpn?'  '+P.ammo[P.wpn]:'')+'  ·  '+String(Math.floor(tod)).padStart(2,'0')+':00'+(rain?' 🌧':'');
 const ob=$('ob');if(cur){ob.style.display='block';ob.textContent=cur.ti+': '+cur.ob+(cur.t?'  ⏱'+Math.ceil(cur.t)+'s':'');const p=cur.pts[cur.k=='kill'?0:cur.i];beam.visible=true;beam.position.set(p[0],35,p[1]);{const ddx=p[0]-tg.x,ddz=p[1]-tg.z,ang=Math.atan2(-ddx*Co(yaw)+ddz*S(yaw),ddx*S(yaw)+ddz*Co(yaw)),gp=$('gp');gp.style.display='block';gp.style.transform=`translateX(-50%) rotate(${ang}rad)`;ob.textContent+='  '+Math.round(H(ddx,ddz))+'m'}}else{ob.style.display='none';$('gp').style.display='none'}
-// V2.5 persistent mission card with reward, objective, timer and live distance
+// V2.6 persistent mission card with reward, objective, timer and live distance
 const card=$('missionCard');
 if(cur){
   card.style.display='block';
