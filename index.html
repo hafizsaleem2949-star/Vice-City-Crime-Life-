@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Vice City: Crime Life</title>
+<title>Vice City: Crime Life — V2.5 Story Edition</title>
 <style>
 :root{--g:#000a;--pk:#ff3b8d;--cy:#35e6ff}
 html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px system-ui,sans-serif;color:#fff;touch-action:none;user-select:none;-webkit-user-select:none}
@@ -56,6 +56,12 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 #loc{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:6;padding:8px 13px;border:1px solid #35e6ff88;border-radius:20px;background:#080d20cc;color:#b9f7ff;font-size:11px;letter-spacing:1px;text-align:center;pointer-events:none;box-shadow:0 0 14px #35e6ff33}
 #v2Signature{font-size:11px;letter-spacing:2px;color:#b9f7ff;margin-top:12px;text-shadow:0 0 12px #35e6ff}
 #ov{backdrop-filter:blur(5px);background:radial-gradient(ellipse at 50% 35%,#38205fe8 0%,#100d25f2 48%,#050711 100%)}
+/* V2.4 cinematic city presentation */
+#c{filter:contrast(1.06) saturate(1.08)}
+#v2Brand{top:10px;left:50%;padding:8px 15px;border:1px solid #ffffff35;border-radius:4px;background:linear-gradient(90deg,#08101dcc,#1b263dcc,#08101dcc);box-shadow:0 5px 25px #0008}
+#v2Brand strong{font-size:13px;letter-spacing:5px;color:#ffe0a0}
+#v2Brand span{color:#d6e8ff;letter-spacing:2.5px}
+#loc{background:#07111ddd;color:#ffe2a6;border-color:#ffcf6388}
 /* V2.3 visual polish */
 #top{border:1px solid #35e6ff55;box-shadow:0 8px 24px #0008;backdrop-filter:blur(8px)}
 #mm{box-shadow:0 0 20px #35e6ff55;background:#07101ddd}
@@ -64,6 +70,15 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 #ov button{box-shadow:0 0 22px #ff3b8d88;letter-spacing:1px;cursor:pointer}
 
 @media(max-width:600px){#v2Brand{top:8px}#v2Brand strong{font-size:10px;letter-spacing:2px}#cameraToggle{top:132px;right:8px;padding:9px 10px}}
+
+/* V2.5 story mission tracker */
+#missionCard{position:fixed;right:16px;bottom:64px;width:min(330px,42vw);display:none;padding:13px 15px;border:1px solid #e8bd65aa;border-left:4px solid #ffd36a;border-radius:5px;background:linear-gradient(115deg,#101723ee,#111827dd);box-shadow:0 10px 28px #0009;backdrop-filter:blur(8px);pointer-events:none}
+#missionCard .mc-kicker{font-size:9px;letter-spacing:3px;color:#ffd36a;font-weight:900}
+#missionCard .mc-title{font-size:16px;font-weight:900;letter-spacing:1px;margin:4px 0;color:#fff}
+#missionCard .mc-objective{font-size:12px;line-height:1.4;color:#d6e0ec}
+#missionCard .mc-meta{display:flex;justify-content:space-between;gap:8px;margin-top:9px;padding-top:8px;border-top:1px solid #ffffff22;font-size:11px;color:#ffd36a}
+@media(max-width:600px){#missionCard{right:8px;bottom:160px;width:min(260px,58vw);padding:9px 11px}#missionCard .mc-title{font-size:13px}}
+
 </style></head><body>
 
 <div id="authScreen">
@@ -81,7 +96,7 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
   </div>
 </div>
 <button id="gameAdminButton" type="button">ADMIN PANEL</button>
-<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>OPEN WORLD EDITION · V2.3</span></div>
+<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>DOWNTOWN STORY EDITION · V2.5</span></div>
 <button id="cameraToggle" type="button" aria-label="Switch camera view">CAMERA: THIRD PERSON</button>
 <button id="weatherToggle" type="button">WEATHER: AUTO</button>
 <button id="pauseToggle" type="button">PAUSE GAME</button>
@@ -90,7 +105,7 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 <canvas id="c"></canvas>
 <div class="p" id="top"><div id="mo">$0</div><div id="bar"><i id="hb"></i></div><div id="st"></div><div id="wp"></div></div>
 <canvas id="mm" class="p" width="120" height="120"></canvas>
-<div class="p" id="ob"></div><div id="loc">SUNSET COAST · EXPLORE THE CITY</div><div class="p" id="gp" style="left:50%;transform:translateX(-50%);top:84px;display:none;font-size:22px;color:#ffd23f">▲</div><div class="p" id="hi"></div><div class="p" id="ts"></div><div id="hit"></div>
+<div class="p" id="ob"></div><div id="missionCard"><div class="mc-kicker">ACTIVE MISSION</div><div class="mc-title" id="mcTitle">MISSION</div><div class="mc-objective" id="mcObjective">Objective</div><div class="mc-meta"><span id="mcReward">REWARD $0</span><span id="mcDistance">GPS —</span></div></div><div id="loc">SUNSET COAST · EXPLORE THE CITY</div><div class="p" id="gp" style="left:50%;transform:translateX(-50%);top:84px;display:none;font-size:22px;color:#ffd23f">▲</div><div class="p" id="hi"></div><div class="p" id="ts"></div><div id="hit"></div>
 <div id="ov"><h1>VICE CITY<br><span>CRIME LIFE</span></h1>
 <p>Marco Reyes steps off the night ferry onto Sunset Coast with a duffel bag and a debt. Find Lola Vega, take jobs, steal rides, outrun the cops and build your empire.</p>
 <p style="font-size:13px;opacity:.85">WASD move · Shift run · Space jump / handbrake · J attack / nitro · F use (enter car, shops, jobs) · Q switch weapon (red marker = gun shop) · drag mouse to look · M mute<br>Heli: Space up, J down. Touch: joystick + buttons.</p>
@@ -106,8 +121,8 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 <script>
 const $=i=>document.getElementById(i),C=(a,l,h)=>Math.max(l,Math.min(h,a)),R=Math.random,rr=(a,b)=>a+R()*(b-a),T=THREE,H=Math.hypot,S=Math.sin,Co=Math.cos,PI=Math.PI;
 const nA=a=>{while(a>PI)a-=2*PI;while(a<-PI)a+=2*PI;return a},inLand=(x,z)=>Math.abs(x)<270&&Math.abs(z)<270;
-const ren=new T.WebGLRenderer({canvas:$('c'),antialias:true});ren.setPixelRatio(Math.min(devicePixelRatio,1.75));ren.shadowMap.enabled=true;
-const scene=new T.Scene(),cam=new T.PerspectiveCamera(65,1,.5,1200);
+const ren=new T.WebGLRenderer({canvas:$('c'),antialias:true});ren.setPixelRatio(Math.min(devicePixelRatio,1.6));ren.shadowMap.enabled=true;ren.shadowMap.type=T.PCFSoftShadowMap;ren.toneMapping=T.ACESFilmicToneMapping;ren.toneMappingExposure=1.12;ren.outputEncoding=T.sRGBEncoding;
+const scene=new T.Scene();scene.fog=new T.Fog(0x7c899a,105,430);const cam=new T.PerspectiveCamera(59,1,.5,1200);
 function rs(){ren.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}addEventListener('resize',rs);rs();
 const hemi=new T.HemisphereLight(0xbfe8ff,0x556677,.6),sun=new T.DirectionalLight(0xfff0d0,1);
 sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-70,right:70,top:70,bottom:-70,far:400});scene.add(hemi,sun,sun.target);
@@ -132,10 +147,61 @@ for(let i=0;i<8;i++)for(let j=0;j<8;j++){const cx=(i-3.5)*60,cz=(j-3.5)*60,k=i+'
 if(i==7&&j==7){plane(44,44,0x6b727a,.04).position.set(cx,.04,cz);plane(36,3,0xffffff,.05).position.set(cx,.05,cz-6);bld(cx,cz+16,30,10,9,4);continue}
 if(PK.includes(k)){plane(40,40,0x3f9d4a,.04).position.set(cx,.04,cz);for(let n=0;n<7;n++)palms.push([cx+rr(-17,17),cz+rr(-17,17)]);continue}
 if(SP[k]){const s=SP[k];bld(cx,cz,s[0],s[1],s[2],s[3]);continue}
-for(let a=-1;a<=1;a+=2)for(let b=-1;b<=1;b+=2)bld(cx+a*10,cz+b*10,16,16,Math.max(8,rr(10,62)*(1.35-dc/5)),Math.floor(R()*6))}
+for(let a=-1;a<=1;a+=2)for(let b=-1;b<=1;b+=2)bld(cx+a*10,cz+b*10,16,16,Math.max(16,rr(24,88)*(1.35-dc/5)),Math.floor(R()*6))}
 for(let x=-250;x<=250;x+=14)for(const s of[-1,1]){palms.push([x,s*260],[s*260,x])}
 {const tr=new T.InstancedMesh(new T.CylinderGeometry(.3,.45,6,6),MM(0x6b4a2b),palms.length),cr=new T.InstancedMesh(new T.SphereGeometry(2.4,6,4),MM(0x2f9e44),palms.length),d=new T.Object3D();
 palms.forEach((p,i)=>{d.position.set(p[0],3,p[1]);d.scale.set(1,1,1);d.updateMatrix();tr.setMatrixAt(i,d.matrix);d.position.y=6.3;d.scale.set(1,.45,1);d.updateMatrix();cr.setMatrixAt(i,d.matrix)});scene.add(tr,cr)}
+// V2.4 DOWNTOWN REALISM PASS — dense facade windows, balconies, AC units, streetlights and overhead lanterns
+// The city remains procedural so it loads without downloading third-party model packs.
+{
+ const winMat=MM(0xffdca0,{emissive:0xffbd68,emissiveIntensity:.34,roughness:.35});
+ const darkWin=MM(0x182b40,{metalness:.55,roughness:.18});
+ const winGeo=new T.BoxGeometry(1,1,1),winData=[],acData=[];
+ const dummy=new T.Object3D();
+ for(const b of B){
+   const step=4.8, yStep=4.4;
+   for(let y=3.1;y<b.h-2;y+=yStep){
+     for(let x=-b.w+2.1;x<b.w-1;x+=step){
+       // Front and rear street-facing window strips
+       winData.push([b.x+x,y,b.z+b.d+.055,.98,1.55,.09,0]);
+       winData.push([b.x+x,y,b.z-b.d-.055,.98,1.55,.09,Math.PI]);
+       if(Math.floor((x+b.w)/step)%3===0 && Math.floor(y/yStep)%2===0)acData.push([b.x+x,y-1.25,b.z+b.d+.28]);
+     }
+     for(let z=-b.d+2.1;z<b.d-1;z+=step){
+       winData.push([b.x+b.w+.055,y,b.z+z,.09,1.55,.98,Math.PI/2]);
+       winData.push([b.x-b.w-.055,y,b.z+z,.09,1.55,.98,-Math.PI/2]);
+     }
+   }
+ }
+ const wins=new T.InstancedMesh(winGeo,winMat,winData.length);
+ winData.forEach((a,i)=>{dummy.position.set(a[0],a[1],a[2]);dummy.rotation.set(0,a[6],0);dummy.scale.set(a[3],a[4],a[5]);dummy.updateMatrix();wins.setMatrixAt(i,dummy.matrix);if(Math.random()<.24)wins.setColorAt(i,new T.Color(0x7895b7))});
+ wins.instanceMatrix.needsUpdate=true;scene.add(wins);
+ const ac=new T.InstancedMesh(new T.BoxGeometry(1,1,1),MM(0x697783,{metalness:.72,roughness:.48}),acData.length);
+ acData.forEach((a,i)=>{dummy.position.set(a[0],a[1],a[2]);dummy.rotation.set(0,0,0);dummy.scale.set(.72,.52,.42);dummy.updateMatrix();ac.setMatrixAt(i,dummy.matrix)});ac.instanceMatrix.needsUpdate=true;scene.add(ac);
+ // Rooftop water tanks and antenna masts break up the skyline.
+ for(let i=0;i<B.length;i+=4){const b=B[i];if(b.h<24)continue;const x=b.x+rr(-b.w*.35,b.w*.35),z=b.z+rr(-b.d*.35,b.d*.35);const tank=new T.Mesh(new T.CylinderGeometry(1.05,1.05,2.1,10),MM(0x667785,{metalness:.35}));tank.position.set(x,b.h+1,z);scene.add(tank);const mast=new T.Mesh(new T.CylinderGeometry(.055,.08,rr(3,7),6),MM(0x293747,{metalness:.6}));mast.position.set(x+2,b.h+3,z);scene.add(mast)}
+}
+// Warm street lamps on main avenues; light pools make the road read as a lived-in city.
+{
+ const poleMat=MM(0x202a34,{metalness:.7}),lampMat=MM(0xffdca0,{emissive:0xffc46b,emissiveIntensity:1.35});
+ for(let road=-240;road<=240;road+=60){for(const side of [-1,1]){
+   const x=road+side*12,z=road;
+   const pole=new T.Group();pole.add(new T.Mesh(new T.CylinderGeometry(.12,.18,7,8),poleMat));
+   const arm=box(3.1,.12,.12,poleMat,side*-1.35,3.35,0);pole.add(arm);
+   const head=new T.Mesh(new T.BoxGeometry(.85,.22,.48),lampMat);head.position.set(side*-2.7,3.25,0);pole.add(head);pole.position.set(x,3.5,z);scene.add(pole);
+ }}
+ // Chinese-neon-inspired street signs and suspended red lanterns in the central shopping strip.
+ const signCanvas=document.createElement('canvas');signCanvas.width=512;signCanvas.height=128;const sg=signCanvas.getContext('2d');
+ sg.fillStyle='#101a2a';sg.fillRect(0,0,512,128);sg.strokeStyle='#ffcf63';sg.lineWidth=8;sg.strokeRect(5,5,502,118);sg.font='bold 58px Arial';sg.textAlign='center';sg.fillStyle='#ffdf80';sg.fillText('SUNSET  •  NIGHT MARKET',256,82);
+ const signTex=new T.CanvasTexture(signCanvas);
+ for(const [x,z,rot] of [[-70,180,0],[70,120,Math.PI],[ -130,60,0],[130,-60,Math.PI]]){const sp=new T.Sprite(new T.SpriteMaterial({map:signTex,transparent:true}));sp.scale.set(18,4.5,1);sp.position.set(x,13,z);sp.rotation.y=rot;scene.add(sp)}
+ const lanternMat=MM(0xd94a20,{emissive:0x8d2108,emissiveIntensity:.55,roughness:.55});
+ for(const z of [180,120,60,0,-60]){
+   const pts=[new T.Vector3(-28,18,z),new T.Vector3(0,16.5,z),new T.Vector3(28,18,z)];
+   const cable=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),24,.035,5,false),poleMat);scene.add(cable);
+   for(const x of [-22,-11,0,11,22]){const g=new T.Group();const body=new T.Mesh(new T.SphereGeometry(.72,12,10),lanternMat);body.scale.set(1,.72,1);g.add(body);const cap=new T.Mesh(new T.CylinderGeometry(.32,.32,.18,8),MM(0xd9a34e,{metalness:.6}));cap.position.y=.55;g.add(cap);const tassel=new T.Mesh(new T.CylinderGeometry(.025,.025,.65,5),lanternMat);tassel.position.y=-.72;g.add(tassel);g.position.set(x,16.4+Math.abs(x)/22*.9,z);scene.add(g)}
+ }
+}
 // V2.2 landmark district expansion: airport, hospital, police HQ, mall and beach pier
 const landmarkData=[
  {name:'SUNSET INTERNATIONAL AIRPORT',short:'AIRPORT',x:210,z:210,color:0x35e6ff},
@@ -211,7 +277,7 @@ g.position.set(x,v.y,z);scene.add(g);V.push(v);return v}
 const P={x:-100,z:252,y:0,vy:0,h:0,hp:100,money:200,veh:null,wpn:1,owned:[1,1,0,0,0,0],ammo:[0,90,0,0,0,0],cd:0,ph:0,homes:0,reg:0},peds=[],cash=[],fx=[],MK=[];
 // Register landmark minimap markers only after MK has been initialized.
 for(const L of landmarkData)MK.push({x:L.x,z:L.z,type:'landmark',col:L.color});
-let heat=0,tod=17,rain=false,started=false,time=0,yaw=PI,pit=.32,lastDrag=-9,mIdx=0,cur=null,mu=0,AC;
+let heat=0,tod=17,rain=false,started=false,time=0,yaw=PI,pit=.24,lastDrag=-9,mIdx=0,cur=null,mu=0,AC;
 let cameraMode='third',worldMode='auto',paused=false;
 P.m=mkChar(0x2b6cb0,0xe0b08a,{pants:0x1d2740,hair:0x1a1209,shades:1});scene.add(P.m);
 function mkPed(t,x,z){const m=mkChar(t=='cop'?0x1a2d6b:t=='gang'?0x7a1b1b:[0xe8e8e8,0x2e6f95,0xc84b4b,0x3c8d5a,0xe2b43c,0x6a4c93,0x222222,0xf08cb4][Math.floor(R()*8)],[0xf1c9a5,0xe0b08a,0xc68a5e,0x8a5a3c,0x5a3a26][Math.floor(R()*5)],t=='cop'?{hat:0x16306e,pants:0x14203f,hair:0x1a1209}:t=='gang'?{pants:0x222222,hair:0x0a0a0a,shades:1}:{});scene.add(m);if(t!='civ'){m.gun.visible=true}
@@ -396,8 +462,8 @@ if(cameraMode==='first'){
   cam.lookAt(eyeX+S(yaw)*18,eyeY+S(pit)*5,eyeZ+Co(yaw)*18);
   if(!P.veh)P.m.visible=false;
 }else{
-  const dist=P.veh?({bus:17,heli:16,boat:14}[P.veh.s.t]||11)+Math.abs(P.veh.f)*.08:8,cx=tg.x-S(yaw)*dist*Co(pit),cz=tg.z-Co(yaw)*dist*Co(pit),cy=(tg.y||0)+1.8+dist*S(pit);
-  cam.position.set(cx,Math.max(.8,cy),cz);cam.lookAt(tg.x,(tg.y||0)+1.5,tg.z);
+  const dist=P.veh?({bus:17,heli:16,boat:14}[P.veh.s.t]||11)+Math.abs(P.veh.f)*.08:8.2,cx=tg.x-S(yaw)*dist*Co(pit),cz=tg.z-Co(yaw)*dist*Co(pit),cy=(tg.y||0)+2.0+dist*S(pit);
+  cam.position.lerp(new T.Vector3(cx,Math.max(.8,cy),cz),Math.min(1,dt*7));cam.lookAt(tg.x,(tg.y||0)+1.62,tg.z);
   P.m.visible=!P.veh;
 }
 env(dt);mini();
@@ -408,6 +474,17 @@ sirG.gain.value=!mu&&stars>0&&V.some(v=>v.cop&&H(v.x-tg.x,v.z-tg.z)<100)?.018:0;
 $('mo').textContent='$'+P.money.toLocaleString();$('hb').style.width=Math.max(0,P.hp)+'%';$('st').textContent='★'.repeat(stars)+'☆'.repeat(5-stars);
 $('wp').textContent=P.veh?(P.veh.s.t.toUpperCase()+'  '+Math.round(Math.abs(P.veh.f)*3.6)+' km/h  HP '+Math.round(P.veh.hp)):WS[P.wpn].n+(P.wpn?'  '+P.ammo[P.wpn]:'')+'  ·  '+String(Math.floor(tod)).padStart(2,'0')+':00'+(rain?' 🌧':'');
 const ob=$('ob');if(cur){ob.style.display='block';ob.textContent=cur.ti+': '+cur.ob+(cur.t?'  ⏱'+Math.ceil(cur.t)+'s':'');const p=cur.pts[cur.k=='kill'?0:cur.i];beam.visible=true;beam.position.set(p[0],35,p[1]);{const ddx=p[0]-tg.x,ddz=p[1]-tg.z,ang=Math.atan2(-ddx*Co(yaw)+ddz*S(yaw),ddx*S(yaw)+ddz*Co(yaw)),gp=$('gp');gp.style.display='block';gp.style.transform=`translateX(-50%) rotate(${ang}rad)`;ob.textContent+='  '+Math.round(H(ddx,ddz))+'m'}}else{ob.style.display='none';$('gp').style.display='none'}
+// V2.5 persistent mission card with reward, objective, timer and live distance
+const card=$('missionCard');
+if(cur){
+  card.style.display='block';
+  $('mcTitle').textContent=cur.ti||'STORY MISSION';
+  $('mcObjective').textContent=cur.ob||'Follow the yellow GPS marker';
+  $('mcReward').textContent='REWARD  $'+cur.rw.toLocaleString();
+  const target=cur.pts[cur.k==='kill'?0:cur.i];
+  const dist=target?Math.round(H(target[0]-tg.x,target[1]-tg.z))+' m':'—';
+  $('mcDistance').textContent=cur.t?' '+Math.ceil(cur.t)+'s · '+dist:'GPS '+dist;
+}else{card.style.display='none'}
 updM(dt);const hi=$('hi');let h='';if(P.hp>0){if(P.veh)h='[F] Exit';else{const m=MK.find(m=>H(P.x-m.x,P.z-m.z)<4.5);if(m)h='[F] '+lab(m);else if(V.some(v=>v.hp>0&&H(P.x-v.x,P.z-v.z)<5))h='[F] Enter vehicle'}}hi.style.display=h?'block':'none';hi.textContent=h}
 function setCameraMode(mode){
   cameraMode=mode;
@@ -428,7 +505,7 @@ function setPaused(v){paused=!!v;$('pauseScreen').style.display=paused?'flex':'n
 $('pauseToggle').addEventListener('click',()=>setPaused(!paused));
 $('resumeGame').addEventListener('click',()=>setPaused(false));
 addEventListener('keydown',e=>{if(e.code==='Escape'&&started){setPaused(!paused);e.preventDefault()}});
-$('go').onclick=()=>{$('ov').style.display='none';started=true;aud();if(AC.resume)AC.resume();toast('Find Lola Vega — the yellow marker is a job giver');setInterval(save,15000)};
+$('go').onclick=()=>{$('ov').style.display='none';started=true;aud();if(AC.resume)AC.resume();toast('Story mode ready — find Lola Vega at the yellow marker');setInterval(save,15000)};
 requestAnimationFrame(loop);
 </script>
 
@@ -642,7 +719,7 @@ requestAnimationFrame(loop);
         saveTimerStarted = true;
         setInterval(() => { window.save(); }, 15000);
       }
-      toast('Find Lola Vega — the yellow marker is a job giver');
+      toast('Story mode ready — find Lola Vega at the yellow marker');
     } catch (e) {
       message(e.message || 'Could not start the game.');
       authScreen.style.display = 'flex';
