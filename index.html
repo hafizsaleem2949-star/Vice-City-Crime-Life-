@@ -98,7 +98,7 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 #cameraToggle,#weatherToggle,#pauseToggle{z-index:25;backdrop-filter:blur(8px)}
 @media(max-width:600px){#mm{width:116px!important;height:116px!important;left:10px!important;bottom:12px!important}#loc{bottom:12px;left:50%;max-width:42vw;font-size:9px}}
 
-#rankPanel{position:fixed;left:16px;top:150px;z-index:24;width:190px;padding:9px 11px;background:#08111ddd;border:1px solid #ffd36a88;border-left:3px solid #ffd36a;border-radius:5px;color:#fff;font:11px Arial;pointer-events:none;box-shadow:0 6px 20px #0008}#rankPanel>div:first-child{display:flex;justify-content:space-between;gap:8px}#rankName{color:#ffd36a;letter-spacing:1px}#rankLevel{color:#b9f7ff;font-weight:bold}#xpTrack{height:6px;background:#273342;border-radius:8px;margin:7px 0 5px;overflow:hidden}#xpFill{display:block;height:100%;width:0;background:linear-gradient(90deg,#35e6ff,#ffd36a);transition:width .25s}#xpText{color:#cbd5e1;font-size:9px;letter-spacing:.5px}@media(max-width:600px){#rankPanel{top:145px;left:8px;width:145px;padding:7px}}
+#rankPanel{position:fixed;left:16px;top:150px;z-index:24;width:190px;padding:9px 11px;background:#08111ddd;border:1px solid #ffd36a88;border-left:3px solid #ffd36a;border-radius:5px;color:#fff;font:11px Arial;pointer-events:auto;box-shadow:0 6px 20px #0008}#rankPanel>div:first-child{display:flex;justify-content:space-between;gap:8px}#rankName{color:#ffd36a;letter-spacing:1px}#rankLevel{color:#b9f7ff;font-weight:bold}#xpTrack{height:6px;background:#273342;border-radius:8px;margin:7px 0 5px;overflow:hidden}#xpFill{display:block;height:100%;width:0;background:linear-gradient(90deg,#35e6ff,#ffd36a);transition:width .25s}#xpText{color:#cbd5e1;font-size:9px;letter-spacing:.5px}#dailyClaim{width:100%;margin-top:8px;padding:7px 8px;border:1px solid #ffd36a88;border-radius:4px;background:linear-gradient(90deg,#a85d13,#e5b94f);color:#160f05;font-weight:900;font-size:10px;letter-spacing:1px;cursor:pointer}#dailyClaim:disabled{background:#293443;color:#9ba8b8;border-color:#536171;cursor:default}@media(max-width:600px){#rankPanel{top:145px;left:8px;width:145px;padding:7px}}
 </style></head><body>
 
 <div id="authScreen">
@@ -116,7 +116,7 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
   </div>
 </div>
 <button id="gameAdminButton" type="button">ADMIN PANEL</button>
-<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>STREET VIEW EDITION · V2.8</span></div>
+<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>STREET VIEW EDITION · V2.9 · DAILY REWARDS</span></div>
 <button id="cameraToggle" type="button" aria-label="Switch camera view">CAMERA: THIRD PERSON</button>
 <button id="weatherToggle" type="button">WEATHER: AUTO</button>
 <button id="pauseToggle" type="button">PAUSE GAME</button>
@@ -124,7 +124,7 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 
 <div id="missionResult"><div class="mr-panel"><div class="mr-tag" id="mrTag">MISSION DEBRIEF</div><h2 id="mrTitle">MISSION COMPLETE</h2><p id="mrText">Objective completed.</p><div class="mr-reward" id="mrReward">+$0</div><button id="missionContinue" type="button">CONTINUE</button></div></div>
 <canvas id="c"></canvas>
-<div id="rankPanel"><div><b id="rankName">ROOKIE</b><span id="rankLevel">LEVEL 1</span></div><div id="xpTrack"><i id="xpFill"></i></div><small id="xpText">0 / 500 XP · 0 REP</small></div><div class="p" id="top"><div id="mo">$0</div><div id="bar"><i id="hb"></i></div><div id="st"></div><div id="wp"></div></div>
+<div id="rankPanel"><div><b id="rankName">ROOKIE</b><span id="rankLevel">LEVEL 1</span></div><div id="xpTrack"><i id="xpFill"></i></div><small id="xpText">0 / 500 XP · 0 REP</small><button id="dailyClaim" type="button">CLAIM DAILY BONUS · $250</button></div><div class="p" id="top"><div id="mo">$0</div><div id="bar"><i id="hb"></i></div><div id="st"></div><div id="wp"></div></div>
 <canvas id="mm" class="p" width="120" height="120"></canvas>
 <div class="p" id="ob"></div><div id="missionCard"><div class="mc-kicker">ACTIVE MISSION</div><div class="mc-title" id="mcTitle">MISSION</div><div class="mc-objective" id="mcObjective">Objective</div><div class="mc-meta"><span id="mcReward">REWARD $0</span><span id="mcDistance">GPS —</span></div></div><div id="loc">SUNSET COAST · EXPLORE THE CITY</div><div class="p" id="gp" style="left:50%;transform:translateX(-50%);top:84px;display:none;font-size:22px;color:#ffd23f">▲</div><div class="p" id="hi"></div><div class="p" id="ts"></div><div id="hit"></div>
 <div id="ov"><h1>VICE CITY<br><span>CRIME LIFE</span></h1>
@@ -298,7 +298,7 @@ g.position.set(x,v.y,z);scene.add(g);V.push(v);return v}
 const P={x:-100,z:252,y:0,vy:0,h:0,hp:100,money:200,veh:null,wpn:1,owned:[1,1,0,0,0,0],ammo:[0,90,0,0,0,0],cd:0,ph:0,homes:0,reg:0},peds=[],cash=[],fx=[],MK=[];
 // Register landmark minimap markers only after MK has been initialized.
 for(const L of landmarkData)MK.push({x:L.x,z:L.z,type:'landmark',col:L.color});
-let heat=0,tod=17,rain=false,started=false,time=0,yaw=PI,pit=.24,lastDrag=-9,mIdx=0,cur=null,mu=0,AC,xp=0,rep=0;
+let heat=0,tod=17,rain=false,started=false,time=0,yaw=PI,pit=.24,lastDrag=-9,mIdx=0,cur=null,mu=0,AC,xp=0,rep=0,dailyClaim='';
 let cameraMode='third',worldMode='auto',paused=false;
 P.m=mkChar(0x2b6cb0,0xe0b08a,{pants:0x1d2740,hair:0x1a1209,shades:1});scene.add(P.m);
 function mkPed(t,x,z){const m=mkChar(t=='cop'?0x1a2d6b:t=='gang'?0x7a1b1b:[0xe8e8e8,0x2e6f95,0xc84b4b,0x3c8d5a,0xe2b43c,0x6a4c93,0x222222,0xf08cb4][Math.floor(R()*8)],[0xf1c9a5,0xe0b08a,0xc68a5e,0x8a5a3c,0x5a3a26][Math.floor(R()*5)],t=='cop'?{hat:0x16306e,pants:0x14203f,hair:0x1a1209}:t=='gang'?{pants:0x222222,hair:0x0a0a0a,shades:1}:{});scene.add(m);if(t!='civ'){m.gun.visible=true}
@@ -443,12 +443,13 @@ function endM(ok,msg){
  if(ok)toast('MISSION PASSED  +$'+reward);else toast(msg||'Mission failed');
  }
 $('missionContinue').addEventListener('click',()=>{$('missionResult').style.display='none';});
+$('dailyClaim').addEventListener('click',()=>{const today=new Date().toLocaleDateString('en-CA');if(dailyClaim===today)return toast('Daily bonus already claimed');dailyClaim=today;P.money+=250;xp+=50;rep+=1;save();toast('Daily bonus claimed: +$250 · +50 XP');});
 function updM(dt){if(!cur)return;const m=cur;if(m.t){m.t-=dt;if(m.t<=0)return endM(0,'Time is up!')}
 if(m.k=='kill'){const a=m.en.filter(e=>!e.dead).length;m.ob='Eliminate the crew ('+a+' left)';if(!a)endM(1);return}
 const p=m.pts[m.i],pr=P.veh||P;if(H(pr.x-p[0],pr.z-p[1])<(m.k=='race'?10:6)){if(m.k=='boat'&&!(P.veh&&P.veh.s.t=='boat'))return;m.i++;noise(.2,2500,.1);if(m.i>=m.pts.length)return endM(1);m.ob=m.k=='race'?'Checkpoint '+(m.i+1)+'/6':'Deliver the package'}}
 // persistence
-function save(){try{localStorage.setItem('vccl',JSON.stringify({m:P.money,o:P.owned,i:mIdx,xp,rep}))}catch(e){}}
-try{const s=JSON.parse(localStorage.getItem('vccl')||'null');if(s){P.money=s.m;P.owned=s.o.concat([0,0,0,0,0,0]).slice(0,6);P.owned.forEach((o,i)=>{if(o&&i)P.ammo[i]=[0,90,200,30,150,6][i]});mIdx=s.i;xp=Math.max(0,Number(s.xp)||0);rep=Math.max(0,Number(s.rep)||0)}}catch(e){}
+function save(){try{localStorage.setItem('vccl',JSON.stringify({m:P.money,o:P.owned,i:mIdx,xp,rep,dailyClaim}))}catch(e){}if(typeof window.save==='function')window.save()}
+try{const s=JSON.parse(localStorage.getItem('vccl')||'null');if(s){P.money=s.m;P.owned=s.o.concat([0,0,0,0,0,0]).slice(0,6);P.owned.forEach((o,i)=>{if(o&&i)P.ammo[i]=[0,90,200,30,150,6][i]});mIdx=s.i;xp=Math.max(0,Number(s.xp)||0);rep=Math.max(0,Number(s.rep)||0);dailyClaim=typeof s.dailyClaim==='string'?s.dailyClaim:''}}catch(e){}
 // environment
 const C1=new T.Color(),sd=new T.Color(0x7fd4ff),sn=new T.Color(0x070722),sk=new T.Color(0xff6f9c),gy=new T.Color(0x6b7782);scene.background=C1;scene.fog=new T.Fog(C1,120,520);
 const hlt=new T.SpotLight(0xfff2cc,0,90,.6,.5);scene.add(hlt,hlt.target);
@@ -506,7 +507,7 @@ env(dt);mini();
 if(AC){const sp=P.veh?Math.abs(P.veh.f):0;engG.gain.value=!mu&&P.veh?.04:0;if(P.veh)eng.frequency.value=P.veh.s.t=='heli'?60+(P.veh.y>1?30:0):38+sp*4.5;
 sirG.gain.value=!mu&&stars>0&&V.some(v=>v.cop&&H(v.x-tg.x,v.z-tg.z)<100)?.018:0;sir.frequency.value=700+250*S(time*7)}
 // HUD
-const level=Math.floor(xp/500)+1,rank=level>=20?'VICE LEGEND':level>=12?'KINGPIN':level>=7?'ENFORCER':level>=3?'STREET SOLDIER':'ROOKIE';$('rankName').textContent=rank;$('rankLevel').textContent='LEVEL '+level;$('xpFill').style.width=(xp%500/5)+'%';$('xpText').textContent=(xp%500)+' / 500 XP · '+rep+' REP';$('mo').textContent='$'+P.money.toLocaleString();$('hb').style.width=Math.max(0,P.hp)+'%';$('st').textContent='★'.repeat(stars)+'☆'.repeat(5-stars);
+const level=Math.floor(xp/500)+1,rank=level>=20?'VICE LEGEND':level>=12?'KINGPIN':level>=7?'ENFORCER':level>=3?'STREET SOLDIER':'ROOKIE';$('rankName').textContent=rank;$('rankLevel').textContent='LEVEL '+level;$('xpFill').style.width=(xp%500/5)+'%';$('xpText').textContent=(xp%500)+' / 500 XP · '+rep+' REP';const today=new Date().toLocaleDateString('en-CA');$('dailyClaim').disabled=dailyClaim===today;$('dailyClaim').textContent=dailyClaim===today?'DAILY BONUS CLAIMED':'CLAIM DAILY BONUS · $250';$('mo').textContent='$'+P.money.toLocaleString();$('hb').style.width=Math.max(0,P.hp)+'%';$('st').textContent='★'.repeat(stars)+'☆'.repeat(5-stars);
 $('wp').textContent=P.veh?(P.veh.s.t.toUpperCase()+'  '+Math.round(Math.abs(P.veh.f)*3.6)+' km/h  HP '+Math.round(P.veh.hp)):WS[P.wpn].n+(P.wpn?'  '+P.ammo[P.wpn]:'')+'  ·  '+String(Math.floor(tod)).padStart(2,'0')+':00'+(rain?' 🌧':'');
 const ob=$('ob');if(cur){ob.style.display='block';ob.textContent=cur.ti+': '+cur.ob+(cur.t?'  ⏱'+Math.ceil(cur.t)+'s':'');const p=cur.pts[cur.k=='kill'?0:cur.i];beam.visible=true;beam.position.set(p[0],35,p[1]);{const ddx=p[0]-tg.x,ddz=p[1]-tg.z,ang=Math.atan2(-ddx*Co(yaw)+ddz*S(yaw),ddx*S(yaw)+ddz*Co(yaw)),gp=$('gp');gp.style.display='block';gp.style.transform=`translateX(-50%) rotate(${ang}rad)`;ob.textContent+='  '+Math.round(H(ddx,ddz))+'m'}}else{ob.style.display='none';$('gp').style.display='none'}
 // V2.6 persistent mission card with reward, objective, timer and live distance
@@ -667,6 +668,8 @@ requestAnimationFrame(loop);
     if (Number.isFinite(Number(data.health))) P.hp = Math.max(1, Math.min(100, Number(data.health)));
     if (Number.isFinite(Number(data.mission_index))) mIdx = Math.max(0, Number(data.mission_index));
     const gd = data.game_data || {};
+    xp = Math.max(0, Number(gd.xp) || xp); rep = Math.max(0, Number(gd.rep) || rep);
+    dailyClaim = typeof gd.daily_claim === 'string' ? gd.daily_claim : dailyClaim;
     if (Array.isArray(gd.owned_weapons)) {
       P.owned = gd.owned_weapons.concat([0,0,0,0,0,0]).slice(0,6).map(Boolean);
       P.owned[0] = 1;
@@ -683,7 +686,7 @@ requestAnimationFrame(loop);
   function saveLocalOnly() {
     try {
       localStorage.setItem('vccl', JSON.stringify({
-        m: P.money, o: P.owned, i: mIdx
+        m: P.money, o: P.owned, i: mIdx, xp, rep, dailyClaim
       }));
     } catch (_) {}
   }
@@ -716,6 +719,7 @@ requestAnimationFrame(loop);
         game_data: {
           owned_weapons: P.owned,
           ammo: P.ammo,
+          xp, rep, daily_claim: dailyClaim,
           position: { x: P.x, z: P.z }
         },
         updated_at: new Date().toISOString()
