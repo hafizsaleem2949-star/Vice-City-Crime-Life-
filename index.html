@@ -35,142 +35,27 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 #authBox button:disabled{opacity:.55;cursor:wait}
 #authMessage{min-height:38px;margin-top:8px;color:#dce8ff;font-size:13px;line-height:1.4;overflow-wrap:anywhere}
 #authPlayer{color:#7dff9b;font-size:12px;margin-top:8px}
+#gameAdminButton{display:none;position:fixed;top:145px;right:12px;z-index:99999;padding:12px 16px;border:2px solid #35e6ff;border-radius:10px;background:#241333;color:#35e6ff;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 0 14px #35e6ff55}
+#gameAdminButton:hover{background:#35e6ff;color:#100b20}
 
 
-/* ===== VICE CITY: CRIME LIFE - MODERN VISUAL UPGRADE ===== */
-:root {
-  --vc-pink: #ff3b8d;
-  --vc-cyan: #35e6ff;
-  --vc-gold: #ffd166;
-  --vc-panel: rgba(7, 12, 28, .88);
-}
-* { box-sizing: border-box; }
-button {
-  cursor: pointer;
-  box-shadow: 0 7px 22px rgba(255, 59, 141, .22);
-  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
-}
-button:hover {
-  filter: brightness(1.13);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(53, 230, 255, .24);
-}
-button:active { transform: translateY(0) scale(.98); }
-#authScreen {
-  background:
-    radial-gradient(ellipse at 18% 18%, rgba(53,230,255,.22), transparent 38%),
-    radial-gradient(ellipse at 82% 78%, rgba(255,59,141,.25), transparent 42%),
-    linear-gradient(135deg, #070817 0%, #15102f 52%, #080b18 100%) !important;
-}
-#authBox {
-  max-width: 430px !important;
-  padding: 32px 28px !important;
-  border: 1px solid rgba(53,230,255,.65) !important;
-  border-radius: 22px !important;
-  background: linear-gradient(145deg, rgba(10,16,36,.97), rgba(23,10,39,.96)) !important;
-  box-shadow: 0 0 0 1px rgba(255,59,141,.12),
-              0 18px 65px rgba(0,0,0,.55),
-              0 0 42px rgba(53,230,255,.13) !important;
-  backdrop-filter: blur(18px);
-}
-#authBox h2 {
-  color: #fff !important;
-  font-size: clamp(30px, 8vw, 38px) !important;
-  letter-spacing: 5px !important;
-  text-shadow: 0 0 18px rgba(255,59,141,.9), 0 0 34px rgba(53,230,255,.35);
-}
-#authBox h3 {
-  color: var(--vc-cyan) !important;
-  font-size: 15px;
-  letter-spacing: 5px !important;
-}
-#authBox input {
-  border: 1px solid rgba(153,177,220,.32) !important;
-  background: rgba(3,7,19,.78) !important;
-  border-radius: 10px !important;
-}
-#authBox input:focus {
-  border-color: var(--vc-cyan) !important;
-  box-shadow: 0 0 0 3px rgba(53,230,255,.12);
-}
-#authBox button {
-  border-radius: 10px !important;
-  letter-spacing: 1px;
-}
-#authSignup {
-  background: linear-gradient(100deg, #ff3b8d, #b82cff) !important;
-}
-#authLogin {
-  background: linear-gradient(100deg, #087fbd, #35cce8) !important;
-}
-.creator-credit {
-  margin: 14px 0 18px;
-  color: #dffaff;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-align: center;
-  text-shadow: 0 0 12px rgba(53,230,255,.75);
-}
-#gameCredit {
-  position: fixed;
-  z-index: 8;
-  left: 50%;
-  bottom: max(8px, env(safe-area-inset-bottom));
-  transform: translateX(-50%);
-  padding: 5px 12px;
-  border: 1px solid rgba(53,230,255,.28);
-  border-radius: 20px;
-  background: rgba(4,8,20,.58);
-  color: #f5fbff;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.8px;
-  text-shadow: 0 0 10px rgba(53,230,255,.8);
-  pointer-events: none;
-  white-space: nowrap;
-}
-#ov {
-  background:
-    radial-gradient(ellipse at 50% 20%, rgba(53,230,255,.22), transparent 42%),
-    linear-gradient(145deg, rgba(9,10,30,.97), rgba(55,12,58,.91) 55%, rgba(8,10,25,.98)) !important;
-  backdrop-filter: blur(5px);
-}
-#ov h1 {
-  line-height: 1.06;
-  text-shadow: 0 0 18px rgba(255,59,141,.85), 0 0 40px rgba(53,230,255,.24) !important;
-}
-#ov p { text-shadow: 0 2px 8px #000; }
-#go {
-  min-width: 190px;
-  background: linear-gradient(100deg, #ff3b8d, #8b35e8) !important;
-  border: 1px solid rgba(255,255,255,.38);
-}
-.p {
-  border: 1px solid rgba(255,255,255,.15);
-  background: rgba(3,8,22,.76);
-  box-shadow: 0 5px 18px rgba(0,0,0,.22);
-  backdrop-filter: blur(8px);
-}
-#mm { border-color: var(--vc-cyan); }
-#top { min-width: 150px; }
-#hi, #ob, #ts { border: 1px solid rgba(53,230,255,.45); }
-@media (max-width: 600px) {
-  #authBox { padding: 25px 20px !important; }
-  #ov { padding: 16px; }
-  #ov p { font-size: 13px; }
-  #gameCredit { font-size: 9px; letter-spacing: 1px; }
-  #joy { width: 108px; height: 108px; }
-}
 
+/* V2.0 premium HUD and camera selector */
+#v2Brand{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:5;text-align:center;pointer-events:none;text-shadow:0 0 14px #35e6ff}
+#v2Brand strong{display:block;font-size:12px;letter-spacing:4px;color:#35e6ff}
+#v2Brand span{display:block;font-size:9px;letter-spacing:2px;color:#fff;opacity:.8;margin-top:3px}
+#cameraToggle{position:fixed;right:12px;top:145px;z-index:8;padding:10px 13px;border:1px solid #35e6ff;border-radius:10px;background:#080d20dd;color:#35e6ff;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 0 16px #35e6ff44}
+#cameraToggle:active{transform:scale(.96)}
+#v2Signature{font-size:11px;letter-spacing:2px;color:#b9f7ff;margin-top:12px;text-shadow:0 0 12px #35e6ff}
+#ov{backdrop-filter:blur(3px)}
+@media(max-width:600px){#v2Brand{top:8px}#v2Brand strong{font-size:10px;letter-spacing:2px}#cameraToggle{top:132px;right:8px;padding:9px 10px}}
 </style></head><body>
 
 <div id="authScreen">
   <div id="authBox">
     <h2>VICE CITY</h2>
     <h3>CRIME LIFE</h3>
-    <div class="creator-credit">Haji M Waqas &amp; Ali Hassan</div>
-    <p>Enter the city. Build your empire.</p>
+    <p>Enter the city. Build your empire.</p><div id="v2Signature">HAJI M WAQAS &amp; ALI HASSAN</div>
     <input id="authUsername" type="text" placeholder="Player name (signup only)" maxlength="24" autocomplete="username">
     <input id="authEmail" type="email" placeholder="Email address" autocomplete="email">
     <input id="authPassword" type="password" placeholder="Password (minimum 6 characters)" autocomplete="current-password">
@@ -180,16 +65,18 @@ button:active { transform: translateY(0) scale(.98); }
     <div id="authPlayer"></div>
   </div>
 </div>
+<button id="gameAdminButton" type="button">ADMIN PANEL</button>
+<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>OPEN WORLD EDITION · V2.0</span></div>
+<button id="cameraToggle" type="button" aria-label="Switch camera view">CAMERA: THIRD PERSON</button>
 
 <canvas id="c"></canvas>
-<div id="gameCredit">Haji M Waqas &amp; Ali Hassan</div>
 <div class="p" id="top"><div id="mo">$0</div><div id="bar"><i id="hb"></i></div><div id="st"></div><div id="wp"></div></div>
 <canvas id="mm" class="p" width="120" height="120"></canvas>
 <div class="p" id="ob"></div><div class="p" id="gp" style="left:50%;transform:translateX(-50%);top:84px;display:none;font-size:22px;color:#ffd23f">▲</div><div class="p" id="hi"></div><div class="p" id="ts"></div><div id="hit"></div>
 <div id="ov"><h1>VICE CITY<br><span>CRIME LIFE</span></h1>
 <p>Marco Reyes steps off the night ferry onto Sunset Coast with a duffel bag and a debt. Find Lola Vega, take jobs, steal rides, outrun the cops and build your empire.</p>
 <p style="font-size:13px;opacity:.85">WASD move · Shift run · Space jump / handbrake · J attack / nitro · F use (enter car, shops, jobs) · Q switch weapon (red marker = gun shop) · drag mouse to look · M mute<br>Heli: Space up, J down. Touch: joystick + buttons.</p>
-<div style="font-size:11px;letter-spacing:2px;color:#35e6ff;margin:8px 0 14px">CHARACTER & VEHICLE EDITION · V1.3</div><button id="go">START</button></div>
+<button id="go">ENTER VICE CITY</button><div id="v2Signature">HAJI M WAQAS &amp; ALI HASSAN</div></div>
 <div id="ctl"><div id="joy"><div id="kn"></div></div>
 <div class="b" id="bJ" style="right:100px;bottom:max(40px,env(safe-area-inset-bottom))">JUMP</div>
 <div class="b" id="bA" style="right:24px;bottom:max(100px,calc(env(safe-area-inset-bottom) + 60px))">ATTACK</div>
@@ -240,36 +127,6 @@ const cy=(a,b,h,mt,x,y,z)=>{const q=new T.Mesh(new T.CylinderGeometry(a,b,h,10),
 const l1=limb(.85,.14,.1,p,-.17,.9),l2=limb(.85,.14,.1,p,.17,.9),a1=limb(.7,.1,.075,m,-.46,1.7),a2=limb(.7,.1,.075,m,.46,1.7);[l1,l2].forEach(l=>l.add(sp(.13,sh,0,-.86,.07,1,.55,1.7)));[a1,a2].forEach(a=>a.add(sp(.08,s,0,-.72,0,1,1,1)));
 const tor=cy(.3,.24,.85,m,0,1.35,0);tor.scale.z=.62;g.add(tor,cy(.25,.26,.14,p,0,.93,0),sp(.13,m,-.4,1.7,0,1,1,1),sp(.13,m,.4,1.7,0,1,1,1),cy(.08,.09,.14,s,0,1.82,0),sp(.2,s,0,2.02,0,1,1.15,1),sp(.215,hr,0,2.08,-.02,1,.75,1.02),l1,l2,a1,a2);
 g.add(box(.04,.04,.03,sh,-.07,2.03,.19),box(.04,.04,.03,sh,.07,2.03,.19));if(o.shades||R()<.3)g.add(box(.34,.07,.05,sh,0,2.03,.2));if(o.hat)g.add(box(.44,.1,.46,MM(o.hat),0,2.22,0),box(.44,.04,.2,MM(o.hat),0,2.18,.28));
-/* extra character detail: neck, ears, nose, belt, shoe soles and jacket seams */
-g.add(cy(.095,.1,.16,s,0,1.86,0),sp(.055,m,-.215,2.0,0,1,1.25,1),sp(.055,m,.215,2.0,0,1,1.25,1),sp(.045,s,0,2.0,.205,1,.8,1.25));
-g.add(box(.48,.09,.29,MM(0x171923),0,.98,0),box(.09,.07,.035,MM(0xc6a34a),0,.98,.17));
-g.add(box(.31,.12,.48,sh,-.17,.08,.055),box(.31,.12,.48,sh,.17,.08,.055));
-g.add(box(.025,.48,.025,MM(0x252a36),-.12,1.36,.205),box(.025,.48,.025,MM(0x252a36),.12,1.36,.205));
-
-/* V1.3 character model detail pass: layered jacket, collar, seams, facial features and footwear */
-const jacket=MM(o.jacket??c,{roughness:.82}),dark=MM(0x20212a),metal=MM(0xb7c4d0,{metalness:.85,roughness:.22});
-g.add(
-  box(.48,.16,.34,jacket,0,1.73,.015),
-  box(.12,.12,.08,jacket,-.27,1.68,0), box(.12,.12,.08,jacket,.27,1.68,0),
-  box(.035,.55,.025,dark,0,1.38,.218),
-  box(.018,.42,.018,metal,0,1.39,.238),
-  box(.045,.045,.025,metal,0,1.55,.245),
-  box(.045,.045,.025,metal,0,1.38,.245),
-  box(.045,.045,.025,metal,0,1.21,.245),
-  box(.22,.055,.025,dark,-.23,1.48,.19),
-  box(.22,.055,.025,dark,.23,1.48,.19),
-  box(.12,.06,.025,metal,-.29,1.18,.13),
-  box(.12,.06,.025,metal,.29,1.18,.13)
-);
-const hairline=MM(o.hair??0x17120e,{roughness:.95});
-g.add(
-  sp(.19,hairline,0,2.16,-.015,1,.55,1),
-  box(.07,.025,.025,dark,-.075,2.08,.195),
-  box(.07,.025,.025,dark,.075,2.08,.195),
-  sp(.018,sh,-.075,2.015,.23,1,1,1),
-  sp(.018,sh,.075,2.015,.23,1,1,1)
-);
-
 g.legs=[l1,l2,a2,a1];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);return g}
 function mkCharOld(c,sk=0xe0b08a){const g=new T.Group(),m=MM(c),s=MM(sk),p=MM(0x222a44),L=(w,h,d,mt,x,y)=>{const q=box(w,h,d,mt,x,y,0);q.geometry.translate(0,-h/2,0);return q};
 const l1=L(.28,.9,.3,p,-.17,.9),l2=L(.28,.9,.3,p,.17,.9),a1=L(.22,.8,.22,m,-.47,1.75),a2=L(.22,.8,.22,m,.47,1.75),tor=box(.7,.9,.4,m,0,1.35,0);
@@ -285,56 +142,14 @@ else{const bus=t=='bus',tk=t=='truck';
  g.add(box(W,bus?2.4:.7,L,c,0,bus?1.6:.65,0));
  if(bus)g.add(box(W+.02,.8,L*.85,gl,0,2.1,0));else if(tk)g.add(box(W,1.2,L*.3,gl,0,1.5,L*.33));else if(t!='bike')g.add(box(W*.85,.6,L*.45,gl,0,1.25,-L*.05));
  if(t=='bike')g.add(box(.3,.5,.7,gl,0,1.2,-.2));
- /* detailed glazing, bumpers, grille, mirrors and wheel hubs */
- if(t!='bike'&&!bus){const glass=MM(0x18364b,{metalness:.35,roughness:.18}),trim=MM(0x111820,{metalness:.55,roughness:.35});
- g.add(box(W*.76,.43,.035,glass,0,1.43,-L*.22),box(W*.76,.42,.035,glass,0,1.43,L*.22));
- for(const side of [-1,1]){g.add(box(.035,.42,L*.42,glass,side*(W*.43),1.42,0),box(.12,.12,.22,trim,side*(W*.52),1.18,L*.22),box(.12,.12,.22,trim,side*(W*.52),1.18,-L*.22));}
- g.add(box(W*.72,.13,.12,trim,0,.42,L*.51),box(W*.72,.13,.12,trim,0,.42,-L*.51),box(W*.42,.16,.08,trim,0,.67,L*.51));
- }
- for(const a of t=='bike'?[[0,.7],[0,-.7]]:[[-1,.32],[1,.32],[-1,-.32],[1,-.32]]){const w=new T.Mesh(whg,MM(0x111111));w.position.set(a[0]*W/2,.38,a[1]*L);w.castShadow=true;g.add(w);if(t!='bike'){const hub=new T.Mesh(new T.CylinderGeometry(.17,.17,.315,12),MM(0x9aa5b1,{metalness:.8,roughness:.25}));hub.rotation.z=PI/2;hub.position.copy(w.position);g.add(hub)}}
+ for(const a of t=='bike'?[[0,.7],[0,-.7]]:[[-1,.32],[1,.32],[-1,-.32],[1,-.32]]){const w=new T.Mesh(whg,MM(0x111111));w.position.set(a[0]*W/2,.38,a[1]*L);w.castShadow=true;g.add(w)}
  g.add(box(.4,.2,.1,hl,-W*.32,.7,L/2),box(.4,.2,.1,hl,W*.32,.7,L/2));
  if(t=='police'){const r=box(.5,.2,.4,MM(0xff0000,{emissive:0xff0000}),-.5,1.65,0),b=box(.5,.2,.4,MM(0x0044ff,{emissive:0x0044ff}),.5,1.65,0);g.add(r,b,box(W+.02,.2,L*.5,MM(0x16306e),0,.65,0));v.bars=[r,b]}}
-
-/* V1.3 vehicle detail pass: door handles, rear lamps, exhaust, grille and sport spoiler */
-if(t!=='bike' && t!=='boat' && t!=='heli'){
-  const trim2=MM(0x151a22,{metalness:.55,roughness:.32});
-  const chrome=MM(0xb9c5ce,{metalness:.9,roughness:.2});
-  const redLamp=MM(0xff3038,{emissive:0x8c0000,emissiveIntensity:.55});
-  const amber=MM(0xffb12b,{emissive:0x6b3100,emissiveIntensity:.35});
-  g.add(
-    box(W*.28,.09,.045,trim2,0,.86,L*.505),
-    box(W*.24,.12,.06,redLamp,-W*.31,.78,-L*.505),
-    box(W*.24,.12,.06,redLamp,W*.31,.78,-L*.505),
-    box(.08,.07,.025,amber,-W*.43,.79,-L*.505),
-    box(.08,.07,.025,amber,W*.43,.79,-L*.505),
-    box(.055,.055,.035,chrome,-W*.12,.78,L*.512),
-    box(.055,.055,.035,chrome,W*.12,.78,L*.512),
-    box(.13,.07,.08,trim2,-W*.27,.95,-L*.1),
-    box(.13,.07,.08,trim2,W*.27,.95,-L*.1),
-    box(.14,.09,.16,chrome,-W*.24,.3,-L*.48),
-    box(.14,.09,.16,chrome,W*.24,.3,-L*.48)
-  );
-  for(const side of [-1,1]){
-    g.add(box(.045,.055,.24,chrome,side*W*.505,1.02,0));
-    g.add(box(.08,.045,L*.72,trim2,side*W*.49,.35,0));
-  }
-  if(t==='sport'){
-    g.add(
-      box(W*.78,.10,.16,trim2,0,1.58,-L*.40),
-      box(.10,.30,.10,trim2,-W*.29,1.43,-L*.40),
-      box(.10,.30,.10,trim2,W*.29,1.43,-L*.40),
-      box(W*.9,.07,.18,MM(col??s.col,{metalness:.45,roughness:.3}),0,1.72,-L*.40)
-    );
-  }
-  if(t==='police'){
-    g.add(box(W*.7,.08,.12,MM(0x101820),0,1.86,0));
-  }
-}
-
 g.position.set(x,v.y,z);scene.add(g);V.push(v);return v}
 // state
 const P={x:-100,z:252,y:0,vy:0,h:0,hp:100,money:200,veh:null,wpn:1,owned:[1,1,0,0,0,0],ammo:[0,90,0,0,0,0],cd:0,ph:0,homes:0,reg:0},peds=[],cash=[],fx=[],MK=[];
 let heat=0,tod=17,rain=false,started=false,time=0,yaw=PI,pit=.32,lastDrag=-9,mIdx=0,cur=null,mu=0,AC;
+let cameraMode='third';
 P.m=mkChar(0x2b6cb0,0xe0b08a,{pants:0x1d2740,hair:0x1a1209,shades:1});scene.add(P.m);
 function mkPed(t,x,z){const m=mkChar(t=='cop'?0x1a2d6b:t=='gang'?0x7a1b1b:[0xe8e8e8,0x2e6f95,0xc84b4b,0x3c8d5a,0xe2b43c,0x6a4c93,0x222222,0xf08cb4][Math.floor(R()*8)],[0xf1c9a5,0xe0b08a,0xc68a5e,0x8a5a3c,0x5a3a26][Math.floor(R()*5)],t=='cop'?{hat:0x16306e,pants:0x14203f,hair:0x1a1209}:t=='gang'?{pants:0x222222,hair:0x0a0a0a,shades:1}:{});scene.add(m);if(t!='civ'){m.gun.visible=true}
 const p={m,x,z,t,hp:t=='civ'?40:t=='cop'?70:60,a:R()*6,w:0,fl:0,cd:rr(.5,2),dead:0,ph:0};m.position.set(x,0,z);peds.push(p);return p}
@@ -511,8 +326,18 @@ if(peds.filter(p=>p.t=='civ').length<32){const q=rpos(50,150);mkPed('civ',Math.a
 inc+=dt;if(inc>20){inc=0;P.money+=75*P.homes}
 // camera
 const tg=P.veh||P;if(P.veh&&time-lastDrag>2.2)yaw+=nA(P.veh.h-yaw)*Math.min(1,dt*2.2);
-const dist=P.veh?({bus:17,heli:16,boat:14}[P.veh.s.t]||11)+Math.abs(P.veh.f)*.08:8,cx=tg.x-S(yaw)*dist*Co(pit),cz=tg.z-Co(yaw)*dist*Co(pit),cy=(tg.y||0)+1.8+dist*S(pit);
-cam.position.set(cx,Math.max(.8,cy),cz);cam.lookAt(tg.x,(tg.y||0)+1.5,tg.z);env(dt);mini();
+if(cameraMode==='first'){
+  const eyeY=(tg.y||0)+(P.veh?1.35:1.62);
+  const eyeX=tg.x+S(yaw)*(P.veh?1.05:0.05),eyeZ=tg.z+Co(yaw)*(P.veh?1.05:0.05);
+  cam.position.set(eyeX,Math.max(.8,eyeY),eyeZ);
+  cam.lookAt(eyeX+S(yaw)*18,eyeY+S(pit)*5,eyeZ+Co(yaw)*18);
+  if(!P.veh)P.m.visible=false;
+}else{
+  const dist=P.veh?({bus:17,heli:16,boat:14}[P.veh.s.t]||11)+Math.abs(P.veh.f)*.08:8,cx=tg.x-S(yaw)*dist*Co(pit),cz=tg.z-Co(yaw)*dist*Co(pit),cy=(tg.y||0)+1.8+dist*S(pit);
+  cam.position.set(cx,Math.max(.8,cy),cz);cam.lookAt(tg.x,(tg.y||0)+1.5,tg.z);
+  P.m.visible=!P.veh;
+}
+env(dt);mini();
 // audio
 if(AC){const sp=P.veh?Math.abs(P.veh.f):0;engG.gain.value=!mu&&P.veh?.04:0;if(P.veh)eng.frequency.value=P.veh.s.t=='heli'?60+(P.veh.y>1?30:0):38+sp*4.5;
 sirG.gain.value=!mu&&stars>0&&V.some(v=>v.cop&&H(v.x-tg.x,v.z-tg.z)<100)?.018:0;sir.frequency.value=700+250*S(time*7)}
@@ -521,6 +346,15 @@ $('mo').textContent='$'+P.money.toLocaleString();$('hb').style.width=Math.max(0,
 $('wp').textContent=P.veh?(P.veh.s.t.toUpperCase()+'  '+Math.round(Math.abs(P.veh.f)*3.6)+' km/h  HP '+Math.round(P.veh.hp)):WS[P.wpn].n+(P.wpn?'  '+P.ammo[P.wpn]:'')+'  ·  '+String(Math.floor(tod)).padStart(2,'0')+':00'+(rain?' 🌧':'');
 const ob=$('ob');if(cur){ob.style.display='block';ob.textContent=cur.ti+': '+cur.ob+(cur.t?'  ⏱'+Math.ceil(cur.t)+'s':'');const p=cur.pts[cur.k=='kill'?0:cur.i];beam.visible=true;beam.position.set(p[0],35,p[1]);{const ddx=p[0]-tg.x,ddz=p[1]-tg.z,ang=Math.atan2(-ddx*Co(yaw)+ddz*S(yaw),ddx*S(yaw)+ddz*Co(yaw)),gp=$('gp');gp.style.display='block';gp.style.transform=`translateX(-50%) rotate(${ang}rad)`;ob.textContent+='  '+Math.round(H(ddx,ddz))+'m'}}else{ob.style.display='none';$('gp').style.display='none'}
 updM(dt);const hi=$('hi');let h='';if(P.hp>0){if(P.veh)h='[F] Exit';else{const m=MK.find(m=>H(P.x-m.x,P.z-m.z)<4.5);if(m)h='[F] '+lab(m);else if(V.some(v=>v.hp>0&&H(P.x-v.x,P.z-v.z)<5))h='[F] Enter vehicle'}}hi.style.display=h?'block':'none';hi.textContent=h}
+function setCameraMode(mode){
+  cameraMode=mode;
+  const b=$('cameraToggle');
+  b.textContent='CAMERA: '+(mode==='first'?'FIRST PERSON':'THIRD PERSON');
+  cam.fov=mode==='first'?78:65;cam.updateProjectionMatrix();
+  if(mode==='third')P.m.visible=!P.veh;
+  toast(mode==='first'?'First-person view enabled':'Third-person view enabled');
+}
+$('cameraToggle').addEventListener('click',()=>setCameraMode(cameraMode==='third'?'first':'third'));
 $('go').onclick=()=>{$('ov').style.display='none';started=true;aud();if(AC.resume)AC.resume();toast('Find Lola Vega — the yellow marker is a job giver');setInterval(save,15000)};
 requestAnimationFrame(loop);
 </script>
@@ -578,6 +412,10 @@ requestAnimationFrame(loop);
     }
     gameUser = user;
     gameProfile = data;
+    const adminButton = document.getElementById('gameAdminButton');
+    if (adminButton) {
+      adminButton.style.display = data.role === 'admin' ? 'block' : 'none';
+    }
     document.getElementById('authPlayer').textContent =
       'Logged in as ' + (data.username || user.email || 'Player');
   }
@@ -708,6 +546,10 @@ requestAnimationFrame(loop);
   };
   signupBtn.addEventListener('click', gameSignup);
   loginBtn.addEventListener('click', gameLogin);
+
+  document.getElementById('gameAdminButton').addEventListener('click', () => {
+    window.location.href = '/admin.html';
+  });
 
   const originalStart = document.getElementById('go');
   originalStart.onclick = async () => {
