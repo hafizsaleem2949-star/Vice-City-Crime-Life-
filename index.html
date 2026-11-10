@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>VICE CITY: CRIME LIFE — V3.0 GTA-Inspired Open World</title>
+<title>VICE CITY: CRIME LIFE — V2.12 Real Cars & Motorcycle</title>
 <style>
 :root{--g:#000a;--pk:#ff3b8d;--cy:#35e6ff}
 html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px system-ui,sans-serif;color:#fff;touch-action:none;user-select:none;-webkit-user-select:none}
@@ -102,44 +102,6 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 
 #rankPanel{position:fixed;left:16px;top:150px;z-index:24;width:190px;padding:9px 11px;background:#08111ddd;border:1px solid #ffd36a88;border-left:3px solid #ffd36a;border-radius:5px;color:#fff;font:11px Arial;pointer-events:none;box-shadow:0 6px 20px #0008}#rankPanel>div:first-child{display:flex;justify-content:space-between;gap:8px}#rankName{color:#ffd36a;letter-spacing:1px}#rankLevel{color:#b9f7ff;font-weight:bold}#xpTrack{height:6px;background:#273342;border-radius:8px;margin:7px 0 5px;overflow:hidden}#xpFill{display:block;height:100%;width:0;background:linear-gradient(90deg,#35e6ff,#ffd36a);transition:width .25s}#xpText{color:#cbd5e1;font-size:9px;letter-spacing:.5px}@media(max-width:600px){#rankPanel{top:145px;left:8px;width:145px;padding:7px}}
 /* V2.9 REALISM PASS: articulated walking/running, idle breathing, rolling wheels and modern LED lighting */
-
-/* V3.0 GTA-inspired quick garage and cinematic HUD */
-#garageToggle,#cinemaToggle{
- position:fixed;right:12px;z-index:26;padding:10px 13px;
- border:1px solid #ffd36a;border-radius:8px;background:#080d20e8;
- color:#ffe2a6;font-size:11px;font-weight:900;letter-spacing:1px;
- cursor:pointer;box-shadow:0 5px 18px #0009;backdrop-filter:blur(8px)
-}
-#garageToggle{top:325px}
-#cinemaToggle{top:370px;border-color:#35e6ff;color:#35e6ff}
-#garagePanel{
- display:none;position:fixed;right:12px;top:415px;z-index:40;
- width:min(270px,calc(100vw - 24px));padding:14px;
- border:1px solid #ffd36a;border-radius:12px;
- background:linear-gradient(145deg,#101a2beF,#070b16f5);
- box-shadow:0 12px 35px #000b;backdrop-filter:blur(12px)
-}
-#garagePanel h3{margin:0 0 5px;color:#ffd36a;letter-spacing:2px;font-size:14px}
-#garagePanel p{margin:0 0 10px;color:#cbd5e1;font-size:11px;line-height:1.4}
-#garagePanel button{display:flex;justify-content:space-between;align-items:center;
- width:100%;margin:7px 0;padding:11px 12px;border-radius:7px;
- background:#17263a;border:1px solid #ffffff24;color:#fff;
- font-size:12px;cursor:pointer}
-#garagePanel button span{color:#8cffb0}
-#garagePanel button:disabled{opacity:.4;cursor:not-allowed}
-#garageClose{background:#5a263b!important;justify-content:center!important}
-body.cinematic #top,body.cinematic #mm,body.cinematic #missionCard,
-body.cinematic #rankPanel,body.cinematic #loc,body.cinematic #v2Brand,
-body.cinematic #cameraToggle,body.cinematic #weatherToggle,
-body.cinematic #pauseToggle,body.cinematic #musicToggle,
-body.cinematic #garageToggle,body.cinematic #cinemaToggle,
-body.cinematic #ob,body.cinematic #gp,body.cinematic #hi{opacity:0;pointer-events:none}
-@media(max-width:600px){
- #garageToggle{top:313px;right:8px;padding:9px 10px}
- #cinemaToggle{top:355px;right:8px;padding:9px 10px}
- #garagePanel{top:398px;right:8px}
-}
-
 </style></head><body>
 
 <div id="authScreen">
@@ -157,25 +119,13 @@ body.cinematic #ob,body.cinematic #gp,body.cinematic #hi{opacity:0;pointer-event
   </div>
 </div>
 <button id="gameAdminButton" type="button">ADMIN PANEL</button>
-<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>OPEN WORLD · REAL CARS · MISSIONS · V3.0</span></div>
+<div id="v2Brand"><strong>VICE CITY · CRIME LIFE</strong><span>REAL CARS · MOTORCYCLE · SOUNDTRACK · V2.12</span></div>
 <button id="cameraToggle" type="button" aria-label="Switch camera view">CAMERA: THIRD PERSON</button>
 <button id="weatherToggle" type="button">WEATHER: AUTO</button>
 <button id="pauseToggle" type="button">PAUSE GAME</button>
 <div id="pauseScreen"><div id="pauseCard"><h2>GAME PAUSED</h2><p>VICE CITY · CRIME LIFE</p><p style="color:#b9f7ff;font-size:12px">HAJI M WAQAS &amp; ALI HASSAN</p><button id="resumeGame">RESUME GAME</button></div></div>
 
 <div id="missionResult"><div class="mr-panel"><div class="mr-tag" id="mrTag">MISSION DEBRIEF</div><h2 id="mrTitle">MISSION COMPLETE</h2><p id="mrText">Objective completed.</p><div class="mr-reward" id="mrReward">+$0</div><button id="missionContinue" type="button">CONTINUE</button></div></div>
-
-<button id="garageToggle" type="button">VEHICLE GARAGE</button>
-<button id="cinemaToggle" type="button">CINEMATIC HUD</button>
-<div id="garagePanel" role="dialog" aria-label="Vehicle garage">
-  <h3>SUNSET MOTOR GARAGE</h3>
-  <p>Choose a vehicle for delivery near your current location. The cost is deducted from your in-game cash.</p>
-  <button type="button" data-garage="sedan">CITY SEDAN <span>$2,500</span></button>
-  <button type="button" data-garage="bike">STREET BIKE <span>$1,800</span></button>
-  <button type="button" data-garage="sport">SPORTS CAR <span>$5,000</span></button>
-  <button id="garageClose" type="button">CLOSE GARAGE</button>
-</div>
-
 <canvas id="c"></canvas>
 <button id="musicToggle" type="button">MUSIC: ON</button>
 <div id="rankPanel"><div><b id="rankName">ROOKIE</b><span id="rankLevel">LEVEL 1</span></div><div id="xpTrack"><i id="xpFill"></i></div><small id="xpText">0 / 500 XP · 0 REP</small></div><div class="p" id="top"><div id="mo">$0</div><div id="bar"><i id="hb"></i></div><div id="st"></div><div id="wp"></div></div>
@@ -183,7 +133,7 @@ body.cinematic #ob,body.cinematic #gp,body.cinematic #hi{opacity:0;pointer-event
 <div class="p" id="ob"></div><div id="missionCard"><div class="mc-kicker">ACTIVE MISSION</div><div class="mc-title" id="mcTitle">MISSION</div><div class="mc-objective" id="mcObjective">Objective</div><div class="mc-meta"><span id="mcReward">REWARD $0</span><span id="mcDistance">GPS —</span></div></div><div id="loc">SUNSET COAST · EXPLORE THE CITY</div><div class="p" id="gp" style="left:50%;transform:translateX(-50%);top:84px;display:none;font-size:22px;color:#ffd23f">▲</div><div class="p" id="hi"></div><div class="p" id="ts"></div><div id="hit"></div>
 <div id="ov"><h1>VICE CITY<br><span>CRIME LIFE</span></h1>
 <p>Marco Reyes steps off the night ferry onto Sunset Coast with a duffel bag and a debt. Find Lola Vega, take jobs, steal rides, outrun the cops and build your empire.</p>
-<p style="font-size:13px;opacity:.85">WASD move · Shift run · Space jump / handbrake · J attack / nitro · F use (enter car, shops, jobs) · Q switch weapon (red marker = gun shop) · drag mouse to look · M mute audio · MUSIC button toggles soundtrack · GTA-inspired open world · vehicle garage · detailed sports cars and motorcycle · cinematic HUD<br>Heli: Space up, J down. Touch: joystick + buttons.</p>
+<p style="font-size:13px;opacity:.85">WASD move · Shift run · Space jump / handbrake · J attack / nitro · F use (enter car, shops, jobs) · Q switch weapon (red marker = gun shop) · drag mouse to look · M mute audio · MUSIC button toggles soundtrack · Detailed sports cars and motorcycle with soundtrack<br>Heli: Space up, J down. Touch: joystick + buttons.</p>
 <button id="go">ENTER VICE CITY</button><div id="v2Signature">HAJI M WAQAS &amp; ALI HASSAN</div><div style="font-size:10px;opacity:.55;margin-top:8px">3D MODEL CREDITS: THREE.JS EXAMPLE ASSETS</div></div>
 <div id="ctl"><div id="joy"><div id="kn"></div></div>
 <div class="b" id="bJ" style="right:100px;bottom:max(40px,env(safe-area-inset-bottom))">JUMP</div>
@@ -321,7 +271,7 @@ function attachHumanModel(g){if(!humanAsset||!g||g.userData.realHuman)return;con
 function loadRealAssets(){
  if(!modelLoader){console.warn('GLTFLoader unavailable; procedural fallback remains active.');return}
  modelLoader.load('https://threejs.org/examples/models/gltf/Soldier.glb',g=>{humanAsset=g;charInstances.forEach(attachHumanModel);console.info('Vice City human model loaded:',(g.animations||[]).map(a=>a.name))},undefined,e=>console.warn('Human 3D model unavailable; procedural character fallback remains active.',e));
- modelLoader.load('https://threejs.org/examples/models/gltf/ferrari.glb',g=>{carAsset=g;for(const v of V)attachCarModel(v);console.info('Vice City sports car model loaded')},undefined,e=>console.warn('Car 3D model unavailable; procedural vehicle fallback remains active.',e));
+ modelLoader.load('/assets/3d/cars/corvette.glb',g=>{carAsset=g;for(const v of V)attachCarModel(v);console.info('Vice City sports car model loaded')},undefined,e=>console.warn('Car 3D model unavailable; procedural vehicle fallback remains active.',e));
 }
 function attachCarModel(v){if(!carAsset||!v||v.realCar||v.s.t!=='sport')return;const root=cloneAsset(carAsset.scene);root.updateMatrixWorld(true);let b=new T.Box3().setFromObject(root),sz=b.getSize(new T.Vector3());const length=Math.max(sz.x,sz.z,.001);root.scale.setScalar(v.s.l/length);root.updateMatrixWorld(true);b=new T.Box3().setFromObject(root);root.position.y-=b.min.y;root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});for(const child of v.m.children)child.visible=false;v.m.add(root);v.realCar=root}
 function mkChar(c,sk=0xe0b08a,o={}){const g=new T.Group(),m=MM(c,{roughness:.85}),s=MM(sk,{roughness:.6}),p=MM(o.pants??[0x1d2740,0x2b2b2b,0x3a4d7a,0x5a4632][Math.floor(R()*4)],{roughness:.9}),sh=MM(0x0e0e0e),hr=MM(o.hair??[0x1a1209,0x3b2412,0xd8b45a,0x0a0a0a][Math.floor(R()*4)]);
@@ -641,45 +591,6 @@ function setCameraMode(mode){
   toast(mode==='first'?'First-person view enabled':'Third-person view enabled');
 }
 $('cameraToggle').addEventListener('click',()=>setCameraMode(cameraMode==='third'?'first':'third'));
-
-// V3.0 GTA-inspired quick vehicle delivery garage. Uses the existing vehicle physics,
-// player cash, save routine and vehicle models; no database schema changes are needed.
-(function setupQuickGarage(){
-  const panel=$('garagePanel'),toggle=$('garageToggle'),close=$('garageClose');
-  if(!panel||!toggle||!close)return;
-  toggle.addEventListener('click',()=>{
-    if(!started){toast('Enter Vice City before opening the garage');return}
-    panel.style.display=panel.style.display==='block'?'none':'block';
-  });
-  close.addEventListener('click',()=>panel.style.display='none');
-  panel.querySelectorAll('[data-garage]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      if(!started||P.hp<=0)return toast('You cannot request a vehicle right now');
-      const type=btn.getAttribute('data-garage');
-      const prices={sedan:2500,bike:1800,sport:5000};
-      const names={sedan:'City Sedan',bike:'Street Bike',sport:'Sports Car'};
-      const price=prices[type];
-      if(P.money<price){toast('Not enough cash for '+names[type]);return}
-      if(P.veh)exitV();
-      P.money-=price;
-      const sx=P.x+S(yaw)*8,sz=P.z+Co(yaw)*8;
-      const vehicle=mkV(type,sx,sz,yaw,Math.floor(R()*0xffffff));
-      vehicle.hp=100;
-      enterV(vehicle);
-      panel.style.display='none';
-      $('mo').textContent='$'+P.money.toLocaleString();
-      toast(names[type]+' delivered · -$'+price.toLocaleString());
-      if(typeof window.save==='function')window.save();
-    });
-  });
-})();
-$('cinemaToggle').addEventListener('click',()=>{
-  document.body.classList.toggle('cinematic');
-  const active=document.body.classList.contains('cinematic');
-  $('cinemaToggle').textContent=active?'SHOW HUD':'CINEMATIC HUD';
-  toast(active?'Cinematic view enabled':'Game HUD restored');
-});
-
 $('weatherToggle').addEventListener('click',()=>{
   worldMode=worldMode==='auto'?'sunny':worldMode==='sunny'?'rain':'auto';
   if(worldMode==='sunny'){rain=false;rp.visible=false;$('weatherToggle').textContent='WEATHER: SUNNY';toast('Clear weather enabled')}
