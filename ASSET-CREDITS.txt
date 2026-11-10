@@ -1,0 +1,10 @@
+VICE CITY: CRIME LIFE — 3D ASSET CREDITS
+
+Vehicle: Chevrolet Corvette Stingray Coupe Z51 (C7)
+Creator: amogusstrikesback2
+Source: https://sketchfab.com/3d-models/chevrolet-corvette-stingray-coupe-z51-c7-6eca876f6b434fa3893b5bef96724623
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+
+This model is included with attribution. If you redistribute or publish the game,
+keep this credit notice and comply with the CC BY 4.0 license terms.
