@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>VICE CITY: CRIME LIFE — V3.2 Visible Rifle Aim Upgrade</title>
+<title>VICE CITY: CRIME LIFE — V3.1 Rifle Aim Asset Integration</title>
 <style>
 :root{--g:#000a;--pk:#ff3b8d;--cy:#35e6ff}
 html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px system-ui,sans-serif;color:#fff;touch-action:none;user-select:none;-webkit-user-select:none}
@@ -103,7 +103,7 @@ html,body{margin:0;height:100%;background:#0b0820;overflow:hidden;font:600 14px 
 #rankPanel{position:fixed;left:16px;top:150px;z-index:24;width:190px;padding:9px 11px;background:#08111ddd;border:1px solid #ffd36a88;border-left:3px solid #ffd36a;border-radius:5px;color:#fff;font:11px Arial;pointer-events:none;box-shadow:0 6px 20px #0008}#rankPanel>div:first-child{display:flex;justify-content:space-between;gap:8px}#rankName{color:#ffd36a;letter-spacing:1px}#rankLevel{color:#b9f7ff;font-weight:bold}#xpTrack{height:6px;background:#273342;border-radius:8px;margin:7px 0 5px;overflow:hidden}#xpFill{display:block;height:100%;width:0;background:linear-gradient(90deg,#35e6ff,#ffd36a);transition:width .25s}#xpText{color:#cbd5e1;font-size:9px;letter-spacing:.5px}@media(max-width:600px){#rankPanel{top:145px;left:8px;width:145px;padding:7px}}
 /* V2.9 REALISM PASS: articulated walking/running, idle breathing, rolling wheels and modern LED lighting */
 
-/* V3.2 visible procedural rifle aim, detailed weapon mesh, FBX motion asset reference */
+/* V3.1 supplied Mixamo rifle-aim animation controls */
 #aimToggle{position:fixed;right:12px;top:325px;z-index:27;padding:10px 13px;border:1px solid #ffcf63;border-radius:8px;background:#08111fee;color:#ffe2a6;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 0 16px #ffd36a44}
 #aimToggle.active{background:#ffd36a;color:#10151d;box-shadow:0 0 22px #ffd36a99}
 #aimReticle{position:fixed;left:50%;top:50%;width:26px;height:26px;transform:translate(-50%,-50%);z-index:23;display:none;pointer-events:none}
@@ -193,7 +193,7 @@ body.cinematic #ob,body.cinematic #gp,body.cinematic #hi{opacity:0;pointer-event
 <div id="ov"><h1>VICE CITY<br><span>CRIME LIFE</span></h1>
 <p>Marco Reyes steps off the night ferry onto Sunset Coast with a duffel bag and a debt. Find Lola Vega, take jobs, steal rides, outrun the cops and build your empire.</p>
 <p style="font-size:13px;opacity:.85">WASD move · Shift run · Space jump / handbrake · J attack / nitro · F use (enter car, shops, jobs) · Q switch weapon (red marker = gun shop) · drag mouse to look · M mute audio · MUSIC button toggles soundtrack · GTA-inspired open world · vehicle garage · detailed sports cars and motorcycle · cinematic HUD<br>Heli: Space up, J down. Touch: joystick + buttons.</p>
-<button id="go">ENTER VICE CITY</button><div id="v2Signature">HAJI M WAQAS &amp; ALI HASSAN</div><div style="font-size:10px;opacity:.55;margin-top:8px">3D MODEL CREDITS: THREE.JS EXAMPLE ASSETS</div></div>
+<button id="go">ENTER VICE CITY</button><div id="v2Signature">HAJI M WAQAS &amp; ALI HASSAN</div><div style="font-size:10px;opacity:.65;margin-top:8px">3D CHARACTER: Business Man by vinish.dev · CC BY 4.0</div></div>
 <div id="ctl"><div id="joy"><div id="kn"></div></div>
 <div class="b" id="bJ" style="right:100px;bottom:max(40px,env(safe-area-inset-bottom))">JUMP</div>
 <div class="b" id="bA" style="right:24px;bottom:max(100px,calc(env(safe-area-inset-bottom) + 60px))">ATTACK</div>
@@ -329,51 +329,56 @@ const modelLoader=T.GLTFLoader?new T.GLTFLoader():null;
 function cloneAsset(src){return T.SkeletonUtils&&T.SkeletonUtils.clone?T.SkeletonUtils.clone(src):src.clone(true)}
 function normalizeModel(root,targetHeight){root.updateMatrixWorld(true);let b=new T.Box3().setFromObject(root),sz=b.getSize(new T.Vector3());const h=Math.max(.001,sz.y);root.scale.setScalar(targetHeight/h);root.updateMatrixWorld(true);b=new T.Box3().setFromObject(root);root.position.y-=b.min.y;root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.material){const mats=Array.isArray(o.material)?o.material:[o.material];mats.forEach(m=>{if(m.map)m.map.encoding=T.sRGBEncoding})}}});return root}
 function setRealHumanMotion(g,mode){const u=g&&g.userData;if(!u||!u.realActions)return;const key=u.realActions[mode]?mode:(u.realActions.idle?'idle':Object.keys(u.realActions)[0]);if(u.realCurrent===key)return;const next=u.realActions[key];if(!next)return;if(u.realCurrent&&u.realActions[u.realCurrent])u.realActions[u.realCurrent].fadeOut(.18);next.reset().fadeIn(.18).play();u.realCurrent=key}
-function attachHumanModel(g){if(!humanAsset||!g||g.userData.realHuman)return;const root=normalizeModel(cloneAsset(humanAsset.scene),2.18);for(const child of g.children)child.visible=false;g.add(root);g.userData.realHuman=root;const mixer=new T.AnimationMixer(root),actions={};for(const clip of humanAsset.animations||[]){const n=clip.name.toLowerCase();const key=n.includes('run')?'run':n.includes('walk')?'walk':n.includes('idle')?'idle':n.includes('tpose')?'idle':null;if(key&&!actions[key])actions[key]=mixer.clipAction(clip)}g.userData.realMixer=mixer;g.userData.realActions=actions;g.userData.realCurrent='';charMixers.push(mixer);setRealHumanMotion(g,'idle')}
+function attachHumanModel(g){if(!humanAsset||!g||g.userData.realHuman)return;const root=normalizeModel(cloneAsset(humanAsset.scene),2.0);for(const child of g.children)child.visible=false;g.add(root);g.userData.realHuman=root;const mixer=new T.AnimationMixer(root),actions={};for(const clip of humanAsset.animations||[]){const n=clip.name.toLowerCase();const key=n.includes('run')?'run':n.includes('walk')?'walk':n.includes('idle')?'idle':n.includes('tpose')?'idle':null;if(key&&!actions[key])actions[key]=mixer.clipAction(clip)}g.userData.realMixer=mixer;g.userData.realActions=actions;g.userData.realCurrent='';charMixers.push(mixer);setRealHumanMotion(g,'idle')}
 function loadRealAssets(){
  if(!modelLoader){console.warn('GLTFLoader unavailable; procedural fallback remains active.');return}
- modelLoader.load('https://threejs.org/examples/models/gltf/Soldier.glb',g=>{humanAsset=g;charInstances.forEach(attachHumanModel);console.info('Vice City human model loaded:',(g.animations||[]).map(a=>a.name))},undefined,e=>console.warn('Human 3D model unavailable; procedural character fallback remains active.',e));
+ modelLoader.load('https://models.vinish.dev/people/business-man.glb',g=>{humanAsset=g;charInstances.forEach(attachHumanModel);console.info('Vice City human model loaded:',(g.animations||[]).map(a=>a.name))},undefined,e=>console.warn('Human 3D model unavailable; procedural character fallback remains active.',e));
  modelLoader.load('https://threejs.org/examples/models/gltf/ferrari.glb',g=>{carAsset=g;for(const v of V)attachCarModel(v);console.info('Vice City sports car model loaded')},undefined,e=>console.warn('Car 3D model unavailable; procedural vehicle fallback remains active.',e));
 }
 function installRifleAimOnPlayer(){
- // The supplied FBX is a MotionOnlyScene: it contains Mixamo skeleton animation,
- // but no skinned character mesh. The existing player is a procedural, unrigged
- // character, so direct FBX retargeting is not possible. Keep the FBX loaded as
- // the source animation reference and use a visible procedural rifle-aim pose.
- const clip=(rifleFbxAsset.animations||[])[0];
- if(clip){
-   P.m.userData.rifleAimSourceClip=clip;
-   P.m.userData.rifleAimAssetLoaded=true;
-   console.info('Rifle Aiming FBX loaded as motion reference:',clip.name,clip.duration);
-   toast('Rifle aim animation asset loaded');
- }else{
-   console.warn('The supplied FBX has no animation clip.');
-   toast('Rifle aim animation clip not found');
+ if(!P||!P.m||!rifleFbxAsset)return;
+ const fbx=rifleFbxAsset;
+ let skinned=false;
+ fbx.traverse(o=>{if(o.isSkinnedMesh)skinned=true});
+ if(skinned){
+   // The supplied Mixamo FBX contains a skinned character and its rifle-aim idle clip.
+   const oldMixer=P.m.userData.realMixer;
+   if(oldMixer){oldMixer.stopAllAction();const ix=charMixers.indexOf(oldMixer);if(ix>=0)charMixers.splice(ix,1)}
+   if(P.m.userData.realHuman)P.m.remove(P.m.userData.realHuman);
+   const root=normalizeModel(fbx,2.18);
+   for(const child of P.m.children)child.visible=false;
+   root.visible=true;P.m.add(root);
+   const mixer=new T.AnimationMixer(root),actions={};
+   (fbx.animations||[]).forEach((clip,i)=>{actions.aim=mixer.clipAction(clip)});
+   P.m.userData.realHuman=root;P.m.userData.realMixer=mixer;P.m.userData.realActions=actions;P.m.userData.realCurrent='';P.m.userData.rifleModelApplied=true;
+   charMixers.push(mixer);setRealHumanMotion(P.m,'aim');
+   console.info('VICE CITY: supplied skinned rifle character installed', (fbx.animations||[]).map(a=>a.name));
+   return;
  }
+ // Animation-only Mixamo FBX: retarget by matching Mixamo bone names to the existing GLB character.
+ const target=P.m.userData.realHuman, mixer=P.m.userData.realMixer, clip=(fbx.animations||[])[0];
+ if(target&&mixer&&clip){
+   const normalized=n=>String(n||'').replace(/mixamorig:/gi,'mixamorig').replace(/[^a-z0-9]/gi,'').toLowerCase();
+   const bones=new Map();target.traverse(o=>{if(o.name)bones.set(normalized(o.name),o.name)});
+   const tracks=clip.tracks.map(track=>{const copy=track.clone();const match=copy.name.match(/mixamorig:?[^.\]]+/i);if(match){const actual=bones.get(normalized(match[0]));if(actual)copy.name=copy.name.replace(match[0],actual)}return copy});
+   const compatible=tracks.filter(t=>{const m=t.name.match(/^([^.]*)\./);return m&&target.getObjectByName(m[1])}).length;
+   if(compatible>=6){const remapped=new T.AnimationClip('Rifle Aiming Idle',clip.duration,tracks);P.m.userData.realActions.aim=mixer.clipAction(remapped);console.info('VICE CITY: rifle aiming animation retargeted to existing character',compatible,'tracks');setRealHumanMotion(P.m,aiming?'aim':'idle');return}
+ }
+ console.warn('Rifle FBX loaded, but it has no skinned character and its animation could not be matched to the current GLB skeleton. Procedural/GLB character remains active.');
 }
 function loadRifleAimAsset(){
- if(!T.FBXLoader){console.warn('FBXLoader unavailable; procedural rifle aim remains active.');return}
+ if(!T.FBXLoader){console.warn('FBXLoader unavailable; rifle animation skipped.');return}
  const loader=new T.FBXLoader();
- loader.load('assets/Rifle%20Aiming%20Idle.fbx',fbx=>{rifleFbxAsset=fbx;installRifleAimOnPlayer()},undefined,error=>{console.warn('Rifle Aiming FBX failed to load. Check assets/Rifle Aiming Idle.fbx',error);toast('FBX missing — upload assets folder; procedural aim still works')});
-}
-function applyVisibleRifleAim(g,on){
- if(!g||!g.arms)return;
- if(on){
-   // Raise both arms toward the weapon, bring the support arm inward, and brace the torso.
-   g.arms[0].rotation.set(-1.22,0,-.24);
-   g.arms[1].rotation.set(-1.28,0,.34);
-   if(g.tor)g.tor.rotation.x=-.055;
-   if(g.gun){g.gun.position.set(.12,1.42,.63);g.gun.rotation.set(0,0,0)}
- }else{
-   if(g.tor)g.tor.rotation.x=0;
-   if(g.gun){g.gun.position.set(.47,1.1,.4);g.gun.rotation.set(0,0,0)}
- }
+ loader.load('assets/Rifle%20Aiming%20Idle.fbx',fbx=>{rifleFbxAsset=fbx;installRifleAimOnPlayer();toast('Rifle Aiming 3D asset loaded')},undefined,error=>{console.warn('Rifle Aiming FBX failed to load. Check assets/Rifle Aiming Idle.fbx',error);toast('Rifle model missing — upload the assets folder to GitHub')});
 }
 function setAimMode(on){
  aiming=!!on;
  const button=$('aimToggle');if(button){button.textContent='AIM: '+(aiming?'ON':'OFF');button.classList.toggle('active',aiming);button.setAttribute('aria-pressed',String(aiming))}
  const reticle=$('aimReticle');if(reticle)reticle.style.display=aiming?'block':'none';
- if(P&&P.m){applyVisibleRifleAim(P.m,aiming&&P.wpn>0);if(P.m.userData.realActions&&P.m.userData.realActions.aim)setRealHumanMotion(P.m,aiming?'aim':'idle')}
+ if(P&&P.m&&P.m.userData.realActions&&P.m.userData.realActions.aim){
+   const speed=0;
+   setRealHumanMotion(P.m,aiming?'aim':speed?'walk':'idle');
+ }
  if(cam){cam.fov=aiming?48:(cameraMode==='first'?78:65);cam.updateProjectionMatrix()}
 }
 function attachCarModel(v){if(!carAsset||!v||v.realCar||v.s.t!=='sport')return;const root=cloneAsset(carAsset.scene);root.updateMatrixWorld(true);let b=new T.Box3().setFromObject(root),sz=b.getSize(new T.Vector3());const length=Math.max(sz.x,sz.z,.001);root.scale.setScalar(v.s.l/length);root.updateMatrixWorld(true);b=new T.Box3().setFromObject(root);root.position.y-=b.min.y;root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});for(const child of v.m.children)child.visible=false;v.m.add(root);v.realCar=root}
@@ -389,12 +394,7 @@ g.add(cy(.075,.075,.16,s,0,1.82,0),box(.43,.075,.045,belt,0,1.02,.205),box(.28,.
 const nose=sp(.045,s,0,1.99,.205,1,1.2,1.4);g.add(nose);[l1,l2].forEach(l=>l.add(sp(.13,sh,0,-.86,.07,1,.55,1.7)));[a1,a2].forEach(a=>a.add(sp(.08,s,0,-.72,0,1,1,1)));
 const tor=cy(.3,.24,.85,m,0,1.35,0);tor.scale.z=.62;g.add(tor,cy(.25,.26,.14,p,0,.93,0),sp(.13,m,-.4,1.7,0,1,1,1),sp(.13,m,.4,1.7,0,1,1,1),cy(.08,.09,.14,s,0,1.82,0),sp(.2,s,0,2.02,0,1,1.15,1),sp(.215,hr,0,2.08,-.02,1,.75,1.02),l1,l2,a1,a2);
 g.add(box(.04,.04,.03,sh,-.07,2.03,.19),box(.04,.04,.03,sh,.07,2.03,.19));if(o.shades||R()<.3)g.add(box(.34,.07,.05,sh,0,2.03,.2));if(o.hat)g.add(box(.44,.1,.46,MM(o.hat),0,2.22,0),box(.44,.04,.2,MM(o.hat),0,2.18,.28));
-g.legs=[l1,l2,a2,a1];g.arms=[a1,a2];g.tor=tor;
-// Detailed 3D rifle assembly, oriented forward along the character's +Z axis.
-const rifle=new T.Group(),gunMetal=MM(0x202833,{metalness:.72,roughness:.3}),gunDark=MM(0x10151c,{metalness:.28,roughness:.62}),gunSteel=MM(0x778391,{metalness:.88,roughness:.22});
-rifle.add(box(.14,.15,.52,gunMetal,0,0,0),box(.12,.19,.19,gunDark,0,-.13,-.08),box(.09,.19,.12,gunDark,0,-.16,.16),box(.065,.065,.36,gunSteel,0,.075,.31),box(.09,.09,.12,gunDark,0,.11,.03),box(.09,.2,.12,gunDark,0,-.19,.03),box(.07,.19,.11,gunDark,0,-.16,-.25));
-const barrel=new T.Mesh(new T.CylinderGeometry(.027,.027,.43,10),gunSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.04,.48);rifle.add(barrel);
-const sight=box(.055,.045,.11,gunDark,0,.13,.18);rifle.add(sight);rifle.position.set(.47,1.1,.4);g.gun=rifle;g.gun.visible=false;g.add(g.gun);charInstances.push(g);attachHumanModel(g);return g}
+g.legs=[l1,l2,a2,a1];g.arms=[a1,a2];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);charInstances.push(g);attachHumanModel(g);return g}
 function mkCharOld(c,sk=0xe0b08a){const g=new T.Group(),m=MM(c),s=MM(sk),p=MM(0x222a44),L=(w,h,d,mt,x,y)=>{const q=box(w,h,d,mt,x,y,0);q.geometry.translate(0,-h/2,0);return q};
 const l1=L(.28,.9,.3,p,-.17,.9),l2=L(.28,.9,.3,p,.17,.9),a1=L(.22,.8,.22,m,-.47,1.75),a2=L(.22,.8,.22,m,.47,1.75),tor=box(.7,.9,.4,m,0,1.35,0);
 g.add(tor,box(.4,.4,.4,s,0,1.98,0),l1,l2,a1,a2);g.legs=[l1,l2,a2,a1];g.arms=[a1,a2];g.tor=tor;g.gun=box(.12,.16,.6,MM(0x111111),.47,1.1,.4);g.gun.visible=false;g.add(g.gun);return g}
@@ -466,7 +466,7 @@ mkr(2,7,'mission',0xffd23f);mkr(6,2,'mission',0xffd23f);mkr(5,6,'gun',0xff3030);
 const beam=new T.Mesh(new T.CylinderGeometry(1.2,1.2,70,8),new T.MeshBasicMaterial({color:0xffd23f,transparent:true,opacity:.45}));beam.visible=false;scene.add(beam);
 // Load external, reusable game-ready GLB models. If a host blocks loading, the built-in models remain playable.
 loadRealAssets();
-loadRifleAimAsset();
+// Optional Rifle FBX disabled: this game now loads its player character from a free hosted GLB asset.
 // starting vehicles
 mkV('sport',-96,243,PI/2);mkV('bike',-90,237,PI/2);mkV('heli',-60,258,0);mkV('bus',-135,243,PI/2);[[-100,285],[100,-285],[-285,100],[285,-100]].forEach(p=>mkV('boat',p[0],p[1],0));mkV('heli',210,205,0);
 for(let i=0;i<22;i++){const ax=Math.round(rr(-3,3)),t=['sedan','sedan','sport','truck','bus','bike'][i%6],h=R()<.5;const v=h?mkV(t,rr(-220,220),ax*60+(R()<.5?5.5:-5.5),R()<.5?PI/2:-PI/2):mkV(t,ax*60+(R()<.5?5.5:-5.5),rr(-220,220),R()<.5?0:PI);if(Math.abs(v.x%60)<14&&Math.abs(v.z%60)<14){v.x+=22;v.m.position.x=v.x}}
@@ -560,7 +560,7 @@ const sp=K.ShiftLeft||K.ShiftRight,w=!inLand(P.x,P.z);let dx=S(yaw)*fw-Co(yaw)*r
 if(m>.05){spd=(w?3:sp||m>.85?8.5:4.5)*Math.min(1,m);P.h+=nA(Math.atan2(dx,dz)-P.h)*Math.min(1,dt*14);P.x+=dx/m*spd*dt;P.z+=dz/m*spd*dt;P.ph+=spd*dt*2.2;if(!w&&P.y==0&&(P.stp=(P.stp||0)-dt)<0){P.stp=.5-spd*.02;noise(.05,900,.05)}}
 const fl=w?-1.1:0;if(K.Space&&P.y<=fl+.01&&!w)P.vy=7.5;P.vy-=22*dt;P.y+=P.vy*dt;if(P.y<=fl){P.y=fl;P.vy=0}
 col(P,.5,P.y);if(K.KeyJ)fire();if(P.fl>0)P.fl-=dt;
-const g=P.m;g.position.set(P.x,P.y+(spd?Math.abs(S(P.ph*2))*.045:0),P.z);g.rotation.y=P.h;setRealHumanMotion(g,aiming&&P.wpn>0?'aim':spd>6?'run':spd>.2?'walk':'idle');g.gun.visible=P.wpn>0;g.legs.forEach((l,i)=>l.rotation.x=spd?S(P.ph)*.92*(i%2?-1:1):0);if(g.arms){if(aiming&&P.wpn>0)applyVisibleRifleAim(g,true);else{g.arms.forEach((a,i)=>{a.rotation.set(spd?S(P.ph)*.52*(i%2?1:-1):0,0,0)});applyVisibleRifleAim(g,false)}}if(P.fl>0||P.sw){g.legs[2].rotation.x=-1.5;if(g.arms&&!aiming)g.arms[0].rotation.x=-.9;}if(P.cd<.1)P.sw=0;
+const g=P.m;g.position.set(P.x,P.y+(spd?Math.abs(S(P.ph*2))*.045:0),P.z);g.rotation.y=P.h;setRealHumanMotion(g,aiming&&P.wpn>0?'aim':spd>6?'run':spd>.2?'walk':'idle');g.gun.visible=P.wpn>0;g.legs.forEach((l,i)=>l.rotation.x=spd?S(P.ph)*.92*(i%2?-1:1):0);if(g.arms)g.arms.forEach((a,i)=>a.rotation.x=spd?S(P.ph)*.52*(i%2?1:-1):0);if(P.fl>0||P.sw){g.legs[2].rotation.x=-1.5;if(g.arms)g.arms[0].rotation.x=-.9;}if(P.cd<.1)P.sw=0;
 for(const c of cash.splice(0).filter(c=>{if(H(c.x-P.x,c.z-P.z)<1.8){P.money+=c.v;scene.remove(c.m);noise(.1,3000,.05);return false}return true}))cash.push(c)}
 const WS=[{n:'Fists',cd:.45,d:14,r:2.4},{n:'Pistol',cd:.3,d:28,r:60},{n:'SMG',cd:.09,d:13,r:55},{n:'Shotgun',cd:.9,d:60,r:25},{n:'Assault Rifle',cd:.13,d:22,r:90},{n:'Rocket Launcher',cd:1.6,d:0,r:70}],GP=[0,0,800,1200,2000,3500];
 function fire(){const w=P.wpn,s=WS[w];if(P.cd>0||(w&&P.ammo[w]<=0))return;P.cd=s.cd;let best=null,bs=1e9;for(const p of peds){if(p.dead)continue;const ex=p.x-P.x,ez=p.z-P.z,d=H(ex,ez);if(d>s.r||d<.1)continue;const a=Math.abs(nA(Math.atan2(ex,ez)-P.h));if(a<(aiming?.16:w?.35:.9)&&a*d+d*.02<bs){bs=a*d+d*.02;best=p}}
@@ -701,7 +701,7 @@ function setCameraMode(mode){
 }
 $('cameraToggle').addEventListener('click',()=>setCameraMode(cameraMode==='third'?'first':'third'));
 $('aimToggle').addEventListener('click',()=>setAimMode(!aiming));
-$('bAim').addEventListener('click',()=>setAimMode(!aiming));
+const mobileAimButton=$('bAim');if(mobileAimButton)mobileAimButton.addEventListener('click',()=>setAimMode(!aiming));
 $('c').addEventListener('contextmenu',e=>e.preventDefault());
 $('c').addEventListener('pointerdown',e=>{if(e.button===2){setAimMode(true);e.preventDefault()}});
 addEventListener('pointerup',e=>{if(e.button===2)setAimMode(false)});
